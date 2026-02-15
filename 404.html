@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Halaman Tidak Ditemukan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e3799;
+            --primary-dark: #0c2461;
+            --bg: #f1f2f6;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #2f3542;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        /* Styling Gambar moya.png */
+        .img-container {
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .img-container img {
+            width: 180px;
+            height: auto;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+        }
+
+        h1 {
+            font-size: 80px;
+            margin: 0;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        h2 {
+            margin: 10px 0;
+            font-size: 22px;
+        }
+
+        p {
+            color: #747d8c;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Tombol Kembali */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(30, 55, 153, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(30, 55, 153, 0.4);
+        }
+
+        .btn-back:active {
+            transform: scale(0.95);
+        }
+
+        /* Animasi Mengambang */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="img-container">
+            <img src="moya.png" alt="MOYA Logo">
+        </div>
+        
+        <h1>404</h1>
+        <h2>Waduh, Nyasar Bro!</h2>
+        <p>Halaman yang dicari nggak ketemu atau mungkin udah pindah tugas. Yuk, balik ke dashboard!</p>
+
+        <a href="index.html" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Balik ke Beranda
+        </a>
+    </div>
+
+</body>
+</html>
