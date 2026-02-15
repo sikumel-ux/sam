@@ -1,0 +1,175 @@
+:root {
+  --primary: #00B7EB;
+  --secondary: #00cceb;
+  --light: #bff7ff;
+  --deep: #008fa4;
+  --white: #ffffff;
+  --gray-bg: #f8fdff;
+}
+
+body { 
+  background-color: var(--light);
+  margin: 0; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex; 
+  justify-content: center;
+}
+
+.app-container {
+  width: 100%; 
+  max-width: 480px; 
+  min-height: 100vh;
+  background: var(--white); 
+  position: relative; 
+  overflow-x: hidden;
+  box-shadow: 0 0 50px rgba(0, 143, 164, 0.1);
+}
+
+/* Header Curve */
+.header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  height: 180px; 
+  border-bottom-left-radius: 80px;
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center;
+  color: white; 
+  box-shadow: 0 4px 20px rgba(0, 183, 235, 0.2);
+}
+
+.moya-logo { 
+  font-size: 3rem; 
+  font-weight: 900; 
+  margin: 0; 
+  text-shadow: 3px 3px var(--deep);
+  letter-spacing: -1px;
+}
+
+.tagline { 
+  font-size: 10px; 
+  text-transform: uppercase;
+  letter-spacing: 2.5px; 
+  opacity: 0.9; 
+  margin-top: 5px; 
+}
+
+/* Main Content */
+.content { 
+  padding: 20px; 
+  margin-top: -45px; 
+  padding-bottom: 100px;
+}
+
+.card { 
+  background: white; 
+  padding: 25px; 
+  border-radius: 35px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.06); 
+  border: 1px solid rgba(191, 247, 255, 0.4);
+}
+
+.page { display: none; }
+.page.active { 
+  display: block; 
+  animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+@keyframes slideUp { 
+  from { opacity: 0; transform: translateY(40px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
+
+/* Form Styles */
+.label { 
+  font-size: 11px; 
+  font-weight: 800; 
+  color: var(--deep); 
+  display: block; 
+  margin: 15px 0 6px 8px; 
+  text-transform: uppercase; 
+}
+
+input, textarea { 
+  width: 100%; 
+  padding: 15px; 
+  border-radius: 18px; 
+  border: 2px solid #f0faff; 
+  background: var(--gray-bg); 
+  box-sizing: border-box; 
+  outline: none; 
+  transition: all 0.3s ease;
+  font-size: 16px; /* Mencegah auto-zoom di iPhone */
+}
+
+input:focus { 
+  border-color: var(--primary); 
+  background: white; 
+  box-shadow: 0 0 12px rgba(0, 183, 235, 0.15);
+}
+
+.type-box { display: flex; gap: 12px; margin-bottom: 5px; }
+.btn-type { 
+  flex: 1; 
+  padding: 14px; 
+  border-radius: 15px; 
+  border: 2px solid #eee; 
+  background: #fafafa; 
+  color: #aaa; 
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-type.active { 
+  border-color: var(--primary); 
+  background: var(--light); 
+  color: var(--deep); 
+}
+
+.btn-main {
+  width: 100%; 
+  padding: 18px; 
+  border-radius: 22px; 
+  border: none;
+  background: var(--primary); 
+  color: white; 
+  font-weight: 800;
+  margin-top: 25px; 
+  box-shadow: 0 8px 20px rgba(0, 183, 235, 0.3); 
+  transition: 0.2s;
+  letter-spacing: 1px;
+}
+
+.btn-main:active { transform: scale(0.95); background: var(--deep); }
+
+/* Navigation */
+nav { 
+  position: fixed; 
+  bottom: 0; 
+  width: 100%; 
+  max-width: 480px; 
+  background: rgba(255, 255, 255, 0.95); 
+  backdrop-filter: blur(10px);
+  display: flex; 
+  justify-content: space-around; 
+  padding: 15px 0 25px 0; 
+  border-top: 1px solid #f0faff;
+  z-index: 999;
+}
+
+.nav-btn { 
+  background: none; 
+  border: none; 
+  color: #cbd5e1; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 6px; 
+  font-size: 10px; 
+  font-weight: 700;
+}
+
+.nav-btn.active { color: var(--primary); }
+.nav-btn i { font-size: 22px; transition: 0.3s; }
+.nav-btn.active i { transform: translateY(-3px); }
