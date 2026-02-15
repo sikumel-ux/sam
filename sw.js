@@ -1,4 +1,4 @@
-const CACHE_NAME = 'moya-v1';
+const CACHE_NAME = 'moya-v2';
 const urlsToCache = [
   'index.html',
   'style.css',
