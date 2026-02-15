@@ -1,0 +1,196 @@
+/* --- MOYA SYSTEM CORE STYLE --- */
+
+:root {
+  --primary: #00B7EB;   /* Biru MOYA */
+  --deep: #0077B6;      /* Biru Gelap */
+  --light: #f0f9ff;     /* Background Biru Muda */
+  --white: #ffffff;
+  --text: #333333;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--primary); /* Header menyatu dengan background atas */
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  background-color: var(--light);
+  position: relative;
+  padding-bottom: 80px; /* Ruang untuk nav bawah */
+}
+
+/* --- HEADER --- */
+.header {
+  background: var(--primary);
+  padding: 30px 20px 50px 20px;
+  color: var(--white);
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: 0 4px 15px rgba(0, 183, 235, 0.3);
+}
+
+.moya-logo {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.tagline {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* --- CONTENT & CARDS --- */
+.content {
+  padding: 0 20px;
+  margin-top: -30px; /* Biar card naik menimpa header */
+}
+
+.card {
+  background: var(--white);
+  border-radius: 30px;
+  padding: 25px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.page {
+  display: none; /* Sembunyikan semua halaman */
+}
+
+.page.active {
+  display: block; /* Tampilkan hanya yang aktif */
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- FORM ELEMENTS --- */
+.label {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  color: #888;
+  margin-bottom: 8px;
+  margin-left: 5px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 15px;
+  border: 2px solid #eee;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: inherit;
+  transition: 0.3s;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+  background: #fff;
+}
+
+textarea {
+  height: 80px;
+  resize: none;
+}
+
+.btn-submit {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,183,235,0.3);
+  transition: 0.3s;
+}
+
+.btn-submit:active {
+  transform: scale(0.95);
+}
+
+.btn-submit:disabled {
+  background: #ccc;
+  box-shadow: none;
+}
+
+/* --- BOTTOM NAVIGATION --- */
+nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 480px;
+  background: var(--white);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0 25px 0;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  z-index: 100;
+}
+
+.nav-item {
+  background: none;
+  border: none;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  flex: 1;
+}
+
+.nav-item i {
+  font-size: 20px;
+}
+
+.nav-item span {
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.nav-item.active {
+  color: var(--primary);
+}
+
+/* --- LOGIN SPECIFIC --- */
+.toggle-pass {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* --- SWEETALERT CUSTOM --- */
+.moya-popup {
+  border-radius: 30px !important;
+}
+.moya-confirm-btn {
+  background: var(--primary) !important;
+  border-radius: 50px !important;
+  padding: 10px 30px !important;
+  }
+  
