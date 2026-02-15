@@ -1,68 +1,236 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuitansi Resmi MOYA</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body { background: #e0f2f1; font-family: 'Inter', sans-serif; display: flex; justify-content: center; padding: 20px; }
-        .receipt-card { background: white; width: 100%; max-width: 450px; padding: 40px; border-radius: 5px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-top: 15px solid #00B7EB; }
-        .line { border-bottom: 1px solid #eee; margin: 15px 0; }
-        .amount-box { background: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; font-size: 20px; font-weight: 900; color: #2e7d32; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Kuitansi Resmi MOYA</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #00B7EB;
+      --grad-end: #008fa4;
+      --deep: #006b7a;
+      --bg: #f0f9ff;
+    }
+
+    body {
+      background-color: var(--bg);
+      font-family: 'Inter', -apple-system, sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .receipt-container {
+      background: white;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    /* Curve Header Kuitansi */
+    .receipt-header {
+      background: linear-gradient(135deg, var(--primary), var(--grad-end));
+      padding: 40px 20px;
+      text-align: center;
+      color: white;
+      border-bottom-left-radius: 80px; /* Curve maut! */
+      position: relative;
+    }
+
+    .receipt-header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      text-shadow: 2px 3px var(--deep);
+    }
+
+    .receipt-header p {
+      margin: 5px 0 0;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      opacity: 0.9;
+    }
+
+    .receipt-body {
+      padding: 30px;
+      position: relative;
+    }
+
+    .receipt-id {
+      position: absolute;
+      top: -25px;
+      right: 30px;
+      background: white;
+      padding: 8px 15px;
+      border-radius: 15px;
+      font-weight: 800;
+      font-size: 12px;
+      color: var(--deep);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      border: 1px solid #eee;
+    }
+
+    .info-group {
+      margin-bottom: 25px;
+    }
+
+    .info-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .info-value {
+      font-size: 16px;
+      color: #333;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* Box Nominal dengan Curve */
+    .amount-card {
+      background: #f8fdff;
+      border-radius: 20px;
+      padding: 20px;
+      border: 2px dashed #00B7EB;
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .amount-card h2 {
+      margin: 0;
+      font-size: 28px;
+      color: var(--primary);
+      font-weight: 900;
+    }
+
+    .receipt-footer {
+      background: #fafafa;
+      padding: 20px 30px;
+      border-top-right-radius: 80px; /* Curve bawah terbalik */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .verified {
+      color: #4caf50;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .btn-download {
+      position: fixed;
+      bottom: 20px;
+      background: var(--deep);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    @media print {
+      .btn-download { display: none; }
+      body { background: white; }
+      .receipt-container { box-shadow: none; border: 1px solid #eee; }
+    }
+  </style>
 </head>
 <body>
-    <div class="receipt-card">
-        <center>
-            <h1 style="color:#00B7EB; margin:0;">MOYA</h1>
-            <small>MATA AIR PEGUNUNGAN TURI</small>
-        </center>
-        
-        <div style="margin-top: 40px;">
-            <p style="margin:0; color:#999; font-size:12px;">No. Transaksi: <b id="v-id" style="color:#333">...</b></p>
-            <div class="line"></div>
-            
-            <p style="font-size:14px; line-height:2;">
-                Telah diterima dari: <br>
-                <b id="v-nama" style="font-size:18px; text-transform: uppercase;">-</b>
-            </p>
-            
-            <p style="font-size:14px; line-height:2;">
-                Uang sejumlah: <br>
-                <div class="amount-box" id="v-amt">Rp 0</div>
-            </p>
-            
-            <p style="font-size:14px; line-height:2;">
-                Untuk pembayaran: <br>
-                <i id="v-ket">-</i>
-            </p>
-        </div>
 
-        <div style="margin-top: 50px; text-align: right;">
-            <p style="font-size:12px; color:#999;" id="v-tgl"></p>
-            <br>
-            <p style="font-weight:bold; color:#00B7EB;">Management MOYA</p>
-        </div>
+  <div class="receipt-container" id="receipt">
+    <div class="receipt-header">
+      <h1>MOYA</h1>
+      <p>Mata Air Pegunungan Turi</p>
     </div>
 
-    <script>
-        const API_URL = "URL_GAS_LO_DISINI";
-        const urlParams = new URLSearchParams(window.location.search);
-        const trxId = urlParams.get('id');
+    <div class="receipt-body">
+      <div class="receipt-id" id="v-id">M-----</div>
 
-        async function load() {
-            if(!trxId) return alert("ID Tidak Ditemukan");
-            const res = await fetch(`${API_URL}?id=${trxId}`);
-            const data = await res.json();
-            
-            document.getElementById('v-id').innerText = data.id;
-            document.getElementById('v-nama').innerText = data.nama;
-            document.getElementById('v-amt').innerText = "Rp " + Number(data.nominal).toLocaleString('id-ID');
-            document.getElementById('v-ket').innerText = data.ket;
-            document.getElementById('v-tgl').innerText = "Sleman, " + data.tgl.split('T')[0];
-        }
-        load();
-    </script>
+      <div class="info-group">
+        <span class="info-label">Telah Diterima Dari:</span>
+        <div class="info-value" id="v-nama" style="font-size: 20px; color: var(--deep);">...</div>
+      </div>
+
+      <div class="info-group">
+        <span class="info-label">Guna Pembayaran:</span>
+        <div class="info-value" id="v-ket">...</div>
+      </div>
+
+      <div class="amount-card">
+        <span class="info-label" style="color: var(--primary);">Jumlah Pembayaran</span>
+        <h2 id="v-amt">Rp 0</h2>
+      </div>
+
+      <div class="info-group" style="margin-bottom: 0;">
+        <span class="info-label">Tanggal Transaksi:</span>
+        <div class="info-value" id="v-tgl" style="font-size: 13px;">...</div>
+      </div>
+    </div>
+
+    <div class="receipt-footer">
+      <div class="verified">
+        <i class="fas fa-check-circle"></i> VERIFIED BY MOYA
+      </div>
+      <div style="text-align: right;">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=MOYA-VERIFIED" id="v-qr" width="45" style="border-radius: 5px;">
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-download" onclick="window.print()">
+    <i class="fas fa-file-pdf"></i> Simpan / Cetak
+  </button>
+
+  <script>
+    // URL Web App GAS Lo
+    const API_URL = "https://script.google.com/macros/s/AKfycbxsUJ_vgSx3m1sXCcHkbBN-gFPyt5EjO2IMTXbHQPeWOEcqoy544jAB5XPznrfh6018cw/exec";
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const trxId = urlParams.get('id');
+
+    async function loadReceipt() {
+      if (!trxId) {
+        document.body.innerHTML = "<center>ID Transaksi Tidak Ditemukan</center>";
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_URL}?id=${trxId}`);
+        const data = await res.json();
+        
+        document.getElementById('v-id').innerText = data.id;
+        document.getElementById('v-nama').innerText = data.nama;
+        document.getElementById('v-ket').innerText = data.ket;
+        document.getElementById('v-amt').innerText = "Rp " + Number(data.nominal).toLocaleString('id-ID');
+        document.getElementById('v-tgl').innerText = new Date(data.tgl).toLocaleDateString('id-ID', { 
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+        });
+        
+        // Update QR Code biar keren
+        document.getElementById('v-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=MOYA-${data.id}`;
+        
+      } catch (e) {
+        alert("Gagal memuat data kuitansi.");
+      }
+    }
+    loadReceipt();
+  </script>
 </body>
-</html>
+    </html>
+    
