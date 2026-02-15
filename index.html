@@ -3,35 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MOYA - Mata Air Pegunungan Turi</title>
+  <title>Login MOYA</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <style>
-    body { background: #f0f9ff; text-align: center; padding: 20px; }
-    .hero { margin-top: 50px; }
-    .product-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin: 20px auto; max-width: 300px; }
-    .btn-order { background: #25d366; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; display: inline-block; font-weight: bold; margin-top: 20px; }
-  </style>
 </head>
-<body>
-  <div class="hero">
-    <h1 style="color:#00B7EB; font-size: 3rem;">MOYA</h1>
-    <p>Segar, Murni dari Pegunungan Turi</p>
+<body style="background: var(--primary); display: flex; align-items: center; justify-content: center; height: 100vh;">
+  <div class="card" style="width: 100%; max-width: 320px; text-align: center;">
+    <h1 style="color:var(--primary); margin-bottom:0;">MOYA</h1>
+    <p style="margin-bottom:20px; font-size:12px; color:#888;">Admin Access</p>
+    <input type="text" id="u" placeholder="Username">
+    <div style="position:relative">
+      <input type="password" id="p" placeholder="Password">
+      <i class="fas fa-eye" id="eye" onclick="togglePass()" style="position:absolute; right:15px; top:15px; color:#ccc"></i>
+    </div>
+    <button onclick="login()" id="btnLogin" class="btn-submit">MASUK</button>
   </div>
 
-  <div class="product-card">
-    <img src="https://cdn-icons-png.flaticon.com/512/3105/3105807.png" width="100">
-    <h3>Isi Ulang Galon</h3>
-    <p style="color: #00B7EB; font-weight: bold;">Rp 7.000</p>
-    <p style="font-size: 12px; color: #777;">Proses higienis dengan teknologi terbaru.</p>
-  </div>
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxsUJ_vgSx3m1sXCcHkbBN-gFPyt5EjO2IMTXbHQPeWOEcqoy544jAB5XPznrfh6018cw/exec";
+    
+    function togglePass() {
+      const p = document.getElementById('p');
+      p.type = p.type === 'password' ? 'text' : 'password';
+    }
 
-  <a href="https://wa.me/62885103203322?text=Halo%20MOYA,%20saya%20mau%20pesan%20isi%20ulang%20galon" class="btn-order">
-    <i class="fab fa-whatsapp"></i> PESAN SEKARANG
-  </a>
-
-  <footer style="margin-top: 100px; opacity: 0.3; font-size: 10px;">
-    &copy; 2026 MOYA. All rights reserved.
-  </footer>
+    async function login() {
+      const u = document.getElementById('u').value;
+      const p = document.getElementById('p').value;
+      const btn = document.getElementById('btnLogin');
+      btn.disabled = true; btn.innerText = "Checking...";
+      
+      try {
+        const res = await fetch(`${API_URL}?action=login&u=${u}&p=${p}`);
+        const data = await res.json();
+        if(data.success) {
+          sessionStorage.setItem("isLoggedIn", "true");
+          window.location.href = "admin.html";
+        } else {
+          Swal.fire('Gagal', 'User/Pass Salah!', 'error');
+        }
+      } catch(e) { alert("Server Error"); }
+      btn.disabled = false; btn.innerText = "MASUK";
+    }
+  </script>
 </body>
 </html>
