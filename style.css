@@ -1,9 +1,12 @@
+/* style.css - MOYA App Modern Mobile-First */
+
 :root {
-  --primary: #00B7EB;      /* Biru lo */
-  --grad-end: #008fa4;    /* Gradasi gelap */
-  --light-cyan: #bff7ff;  /* Background aksen */
-  --deep: #006b7a;        /* Shadow & Text deep */
+  --primary: #00B7EB;      /* Biru Utama */
+  --grad-end: #008fa4;    /* Gradasi Deep Teal */
+  --light-bg: #bff7ff;    /* Aksen Biru Muda */
+  --text-deep: #006b7a;   /* Warna Teks/Shadow */
   --white: #ffffff;
+  --input-bg: #f8fdff;
 }
 
 * { 
@@ -12,9 +15,9 @@
 }
 
 body { 
-  background-color: #f0f9ff; 
+  background-color: #f0f9ff; /* Background layar belakang */
   margin: 0; 
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', -apple-system, sans-serif;
   display: flex; 
   justify-content: center;
 }
@@ -26,21 +29,24 @@ body {
   background: #fdfdfd; 
   position: relative; 
   overflow-x: hidden;
-  box-shadow: 0 0 40px rgba(0,0,0,0.05);
+  box-shadow: 0 0 50px rgba(0,0,0,0.05);
 }
 
-/* Header Section */
+/* --- HEADER SECTION --- */
+/* Perbaikan: Membuat lengkungan simetris kiri-kanan */
 .header {
   background: linear-gradient(135deg, var(--primary), var(--grad-end));
-  height: 220px; 
-  border-bottom-left-radius: 100px;
+  height: 230px; 
+  border-bottom-left-radius: 60px;  /* Seimbang kiri */
+  border-bottom-right-radius: 60px; /* Seimbang kanan */
   display: flex; 
   flex-direction: column; 
   align-items: center; 
   justify-content: center;
   color: white; 
-  padding-bottom: 40px;
-  box-shadow: 0 10px 20px rgba(0, 183, 235, 0.2);
+  padding-top: 10px;
+  padding-bottom: 50px;
+  box-shadow: 0 10px 25px rgba(0, 143, 164, 0.2);
 }
 
 .moya-logo { 
@@ -48,32 +54,34 @@ body {
   font-weight: 900; 
   margin: 0; 
   letter-spacing: -2px;
-  text-shadow: 3px 4px var(--deep);
+  text-shadow: 3px 4px var(--text-deep);
+  line-height: 1;
 }
 
 .tagline { 
-  font-size: 11px; 
+  font-size: 10px; 
   text-transform: uppercase;
-  letter-spacing: 3px; 
+  letter-spacing: 2px; 
   opacity: 0.9; 
-  margin-top: -5px;
-  font-weight: 300;
+  margin-top: 8px;
+  font-weight: 400;
 }
 
-/* Content Area */
+/* --- CONTENT AREA --- */
 .content { 
   padding: 0 20px; 
-  margin-top: -60px; 
+  margin-top: -65px; /* Menumpuk di atas lengkungan header */
   padding-bottom: 120px;
+  position: relative;
+  z-index: 10;
 }
 
 .card { 
-  background: rgba(255, 255, 255, 0.98); 
-  backdrop-filter: blur(10px);
-  padding: 30px; 
-  border-radius: 40px;
+  background: var(--white); 
+  padding: 25px; 
+  border-radius: 35px;
   box-shadow: 0 15px 35px rgba(0,0,0,0.08); 
-  border: 1px solid rgba(255,255,255,0.5);
+  border: 1px solid rgba(191, 247, 255, 0.4);
 }
 
 .page { display: none; }
@@ -87,34 +95,40 @@ body {
   to { opacity: 1; transform: translateY(0); } 
 }
 
-/* Form Elements */
+/* --- FORM ELEMENTS --- */
 .label { 
   font-size: 11px; 
-  font-weight: 700; 
-  color: var(--deep); 
+  font-weight: 800; 
+  color: var(--text-deep); 
   display: block; 
-  margin: 15px 0 5px 10px; 
+  margin: 15px 0 6px 10px; 
   text-transform: uppercase; 
 }
 
-input, textarea { 
+input, textarea, select { 
   width: 100%; 
   padding: 16px; 
   border-radius: 20px; 
   border: 2px solid #eefaff; 
-  background: #f8fdff; 
+  background: var(--input-bg); 
   outline: none; 
   transition: 0.3s;
   font-size: 16px;
+  color: #333;
 }
 
 input:focus { 
   border-color: var(--primary); 
-  background: white; 
-  box-shadow: 0 0 15px rgba(0, 183, 235, 0.1);
+  background: var(--white); 
+  box-shadow: 0 0 15px rgba(0, 183, 235, 0.15);
 }
 
-.type-selector { display: flex; gap: 10px; margin-bottom: 5px; }
+.type-selector { 
+  display: flex; 
+  gap: 12px; 
+  margin-bottom: 5px; 
+}
+
 .btn-type { 
   flex: 1; 
   padding: 14px; 
@@ -124,18 +138,19 @@ input:focus {
   color: #bbb; 
   font-weight: bold;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 .btn-type.active { 
   border-color: var(--primary); 
-  background: var(--light-cyan); 
-  color: var(--deep); 
+  background: var(--light-bg); 
+  color: var(--text-deep); 
 }
 
 .btn-submit {
   width: 100%; 
-  padding: 20px; 
-  border-radius: 25px; 
+  padding: 18px; 
+  border-radius: 22px; 
   border: none;
   background: linear-gradient(to right, var(--primary), var(--grad-end));
   color: white; 
@@ -147,15 +162,18 @@ input:focus {
   letter-spacing: 1px;
 }
 
-.btn-submit:active { transform: scale(0.95); opacity: 0.9; }
+.btn-submit:active { 
+  transform: scale(0.96); 
+  opacity: 0.9; 
+}
 
-/* Navigation Bar */
+/* --- NAVIGATION --- */
 nav { 
   position: fixed; 
   bottom: 0; 
   width: 100%; 
   max-width: 480px; 
-  background: rgba(255, 255, 255, 0.9); 
+  background: rgba(255, 255, 255, 0.95); 
   backdrop-filter: blur(15px);
   display: flex; 
   justify-content: space-around; 
@@ -174,9 +192,19 @@ nav {
   gap: 5px; 
   font-size: 11px; 
   font-weight: 600;
+  cursor: pointer;
 }
 
-.nav-item.active { color: var(--primary); }
-.nav-item i { font-size: 22px; transition: 0.3s; }
-.nav-item.active i { transform: translateY(-5px); }
+.nav-item.active { 
+  color: var(--primary); 
+}
+
+.nav-item i { 
+  font-size: 24px; 
+  transition: 0.3s; 
+}
+
+.nav-item.active i { 
+  transform: translateY(-5px); 
+  }
   
