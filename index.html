@@ -68,8 +68,8 @@
 </div>
 
 <script>
-  const API_URL = "GANTI_URL_GAS_LO";
-  const GITHUB_URL = "https://username.github.io/repo"; // GANTI INI
+  const API_URL = "https://script.google.com/macros/s/AKfycbxsUJ_vgSx3m1sXCcHkbBN-gFPyt5EjO2IMTXbHQPeWOEcqoy544jAB5XPznrfh6018cw/exec";
+  const GITHUB_URL = "https://moya.sekawan.my.id"; // GANTI INI
   
   document.querySelectorAll('input[type="date"]').forEach(i => i.valueAsDate = new Date());
 
@@ -102,7 +102,7 @@
     // Format WA & Kirim
     let formattedWA = wa.startsWith('0') ? '62' + wa.substring(1) : wa;
     const link = `${GITHUB_URL}/kuitansi.html?id=${idTrx}`;
-    const pesan = `*KUITANSI DIGITAL MOYA*%0A%0AHalo *${nama}*, Terima kasih telah memesan. Berikut link kuitansi pembayaran Anda:%0A%0A📄 ${link}%0A💰 Total: Rp ${Number(amt).toLocaleString()}`;
+    const pesan = `*e-KUITANSI MOYA*%0A%0AHalo *${nama}*, Terima kasih telah memesan. Berikut link kuitansi pembayaran Anda:%0A%0A📄 ${link}%0A💰 Total: Rp ${Number(amt).toLocaleString()}`;
     
     window.open(`https://wa.me/${formattedWA}?text=${pesan}`, '_blank');
   }
