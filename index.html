@@ -4,13 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>MOYA System</title>
-  
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#00B7EB">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3105/3105807.png">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -50,7 +45,7 @@
         </div>
 
         <h4 style="font-size:14px; color:#666;"><i class="fas fa-history"></i> Riwayat Terakhir</h4>
-        <div id="log-data" style="max-height:300px; overflow-y:auto; border-top:1px solid #eee;"></div>
+        <div id="log-data" style="max-height:400px; overflow-y:auto; border-top:1px solid #eee;"></div>
       </div>
     </section>
 
@@ -61,34 +56,33 @@
         <input type="date" id="k-tgl">
         <span class="label">Jenis Arus</span>
         <select id="k-jenis" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin-bottom:15px;">
-          <option value="Masuk">Pemasukan Lain</option>
-          <option value="Keluar">Pengeluaran Operasional</option>
+          <option value="Masuk">Pemasukan (Uang Masuk)</option>
+          <option value="Keluar">Pengeluaran (Uang Keluar)</option>
         </select>
         <span class="label">Nominal</span>
         <input type="number" id="k-amt" placeholder="Rp 0" inputmode="numeric">
         <span class="label">Keterangan</span>
-        <textarea id="k-desc" placeholder="Contoh: Beli BBM armada"></textarea>
+        <textarea id="k-desc" placeholder="Tulis keterangan di sini (misal: Jual botol)"></textarea>
         <button onclick="simpanKas()" id="btn-kas" class="btn-submit">SIMPAN KAS</button>
       </div>
     </section>
 
     <section id="transaksi" class="page">
       <div class="card">
-        <h3 style="color:var(--deep);"><i class="fas fa-receipt"></i> Input Penjualan</h3>
+        <h3 style="color:var(--deep);"><i class="fas fa-receipt"></i> Penjualan (Kuitansi)</h3>
         <span class="label">Tanggal</span>
         <input type="date" id="t-tgl">
         <span class="label">Nama Konsumen</span>
         <input type="text" id="t-nama" placeholder="Bapak/Ibu...">
         <span class="label">No. WhatsApp</span>
         <input type="tel" id="t-wa" placeholder="08xxxxxxxxxx">
-        <span class="label">Nominal</span>
+        <span class="label">Nominal Pembayaran</span>
         <input type="number" id="t-amt" placeholder="Rp 0" inputmode="numeric">
-        <span class="label">Keterangan</span>
-        <textarea id="t-desc" placeholder="Contoh: Isi ulang 15 Galon"></textarea>
+        <span class="label">Keterangan Produk</span>
+        <textarea id="t-desc" placeholder="Contoh: 10 Galon MOYA"></textarea>
         <button onclick="simpanTransaksi()" id="btn-trx" class="btn-submit">SIMPAN & KIRIM WA</button>
       </div>
     </section>
-
   </main>
 
   <nav>
@@ -102,9 +96,12 @@
   const API_URL = "https://script.google.com/macros/s/AKfycbxsUJ_vgSx3m1sXCcHkbBN-gFPyt5EjO2IMTXbHQPeWOEcqoy544jAB5XPznrfh6018cw/exec";
   const GITHUB_URL = "https://moya.sekawan.my.id"; 
 
-  if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+  // Format Tanggal Indonesia
+  const fmtIndo = (dateStr) => {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  };
 
-  // Set default date
   document.querySelectorAll('input[type="date"]').forEach(i => i.valueAsDate = new Date());
 
   function nav(id, el) {
@@ -116,13 +113,18 @@
 
   async function simpanKas() {
     const btn = document.getElementById('btn-kas');
-    const data = ["INTERNAL", document.getElementById('k-tgl').value, "Operasional", "-", document.getElementById('k-amt').value, document.getElementById('k-desc').value, document.getElementById('k-jenis').value, new Date().toLocaleString()];
+    const ket = document.getElementById('k-desc').value;
+    if(!ket) return alert("Keterangan wajib diisi!");
+    
+    // Data: [ID, Tanggal, Nama, WhatsApp, Nominal, Keterangan, Jenis, Waktu]
+    const data = ["INTERNAL", document.getElementById('k-tgl').value, "KAS INTERNAL", "-", document.getElementById('k-amt').value, ket, document.getElementById('k-jenis').value, new Date().toLocaleString()];
+    
     btn.disabled = true; btn.innerText = "MENYIMPAN...";
     await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ data: data }) });
     alert("Kas Berhasil Dicatat!");
     btn.disabled = false; btn.innerText = "SIMPAN KAS";
     document.getElementById('k-amt').value = ''; document.getElementById('k-desc').value = '';
-    nav('laporan', document.querySelector('.nav-item')); // Kembali ke dashboard
+    nav('laporan', document.querySelector('.nav-item'));
   }
 
   async function simpanTransaksi() {
@@ -131,20 +133,23 @@
     const wa = document.getElementById('t-wa').value;
     const amt = document.getElementById('t-amt').value;
     const nama = document.getElementById('t-nama').value;
-    if(!wa || !amt) return alert("WhatsApp & Nominal Wajib Diisi!");
+    const ket = document.getElementById('t-desc').value;
 
-    const data = [idTrx, document.getElementById('t-tgl').value, nama, wa, amt, document.getElementById('t-desc').value, "Masuk", new Date().toLocaleString()];
+    if(!wa || !amt || !nama) return alert("Nama, WA & Nominal wajib diisi!");
+
+    const data = [idTrx, document.getElementById('t-tgl').value, nama, wa, amt, ket, "Masuk", new Date().toLocaleString()];
+    
     btn.disabled = true; btn.innerText = "MEMPROSES...";
     await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ data: data }) });
 
     let fw = wa.startsWith('0') ? '62' + wa.substring(1) : wa;
     const link = `${GITHUB_URL}/kuitansi.html?id=${idTrx}`;
-    const text = `*KUITANSI DIGITAL MOYA*%0A%0AHalo *${nama}*, Berikut link kuitansi pembayaran Anda:%0A%0A📄 ${link}%0A💰 Total: Rp ${Number(amt).toLocaleString()}`;
+    const text = `*KUITANSI DIGITAL MOYA*%0A%0AHalo *${nama}*, Berikut link kuitansi pembayaran Anda:%0A%0A📄 ${link}%0A💰 Total: Rp ${Number(amt).toLocaleString('id-ID')}`;
     
     window.open(`https://wa.me/${fw}?text=${text}`, '_blank');
-    alert("Penjualan Dicatat!");
     btn.disabled = false; btn.innerText = "SIMPAN & KIRIM WA";
     document.querySelectorAll('#transaksi input:not([type="date"]), #transaksi textarea').forEach(i => i.value = '');
+    nav('laporan', document.querySelector('.nav-item'));
   }
 
   async function muatLaporan() {
@@ -156,27 +161,38 @@
       const start = new Date(document.getElementById('f-start').value);
       const end = new Date(document.getElementById('f-end').value);
       let inSum = 0, outSum = 0, html = "";
+
       data.reverse().forEach(r => {
         const tgl = new Date(r.tgl);
         if(tgl >= start && tgl <= end) {
           const n = Number(r.nominal);
-          if(r.jenis === 'Masuk') inSum += n; else outSum += n;
-          html += `<div style="padding:12px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
-            <div><b>${r.nama}</b><br><small>${r.tgl.split('T')[0]}</small></div>
-            <b style="color:${r.jenis==='Masuk'?'green':'red'}">Rp ${n.toLocaleString()}</b>
+          const isMasuk = r.jenis === 'Masuk';
+          if(isMasuk) inSum += n; else outSum += n;
+          
+          // Nama Tampilan: Jika Kas Internal pakai keterangan, jika Jual pakai Nama Konsumen
+          const displayLabel = r.id === "INTERNAL" ? r.ket : r.nama;
+          const subLabel = r.id === "INTERNAL" ? "Internal" : r.ket;
+
+          html += `<div style="padding:15px 0; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <b style="font-size:14px; color:#333;">${displayLabel}</b><br>
+              <small style="color:#999;">${fmtIndo(r.tgl)} | ${subLabel}</small>
+            </div>
+            <div style="text-align:right">
+              <b style="color:${isMasuk?'#1b5e20':'#b71c1c'}; font-size:15px;">${isMasuk?'+':'-'} Rp ${n.toLocaleString('id-ID')}</b>
+            </div>
           </div>`;
         }
       });
-      document.getElementById('sum-in').innerText = "Rp " + inSum.toLocaleString();
-      document.getElementById('sum-out').innerText = "Rp " + outSum.toLocaleString();
-      document.getElementById('sum-total').innerText = "Rp " + (inSum - outSum).toLocaleString();
-      log.innerHTML = html || "Tidak ada data.";
-    } catch (e) { log.innerHTML = "Gagal memuat."; }
+      document.getElementById('sum-in').innerText = "Rp " + inSum.toLocaleString('id-ID');
+      document.getElementById('sum-out').innerText = "Rp " + outSum.toLocaleString('id-ID');
+      document.getElementById('sum-total').innerText = "Rp " + (inSum - outSum).toLocaleString('id-ID');
+      log.innerHTML = html || "<center style='padding:20px; color:#999;'>Tidak ada data.</center>";
+    } catch (e) { log.innerHTML = "<center>Gagal memuat data.</center>"; }
   }
   
-  // Muat data saat pertama buka
   window.onload = muatLaporan;
 </script>
 </body>
   </html>
-          
+  
