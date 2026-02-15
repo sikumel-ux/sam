@@ -3,193 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="manifest" href="<?= ScriptApp.getService().getUrl() ?>?page=manifest">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>MOYA App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #296374;
-      --secondary: #629FAD;
-      --bg-accent: #EDEDCE;
-    }
-    body { 
-      background-color: var(--bg-accent);
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      justify-content: center; /* Center di desktop */
-    }
-    .app-container {
-      width: 100%;
-      max-width: 480px; /* Batasi lebar biar kayak apps */
-      min-height: 100vh;
-      background-color: #ffffff;
-      position: relative;
-      box-shadow: 0 0 20px rgba(0,0,0,0.05);
-    }
-    .header-curve {
-      background-color: var(--primary);
-      height: 160px;
-      border-bottom-left-radius: 60px;
-      border-bottom-right-radius: 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-align: center;
-      padding-bottom: 30px;
-    }
-    .page { display: none; padding: 20px; animation: slideUp 0.3s ease-out; }
-    .page.active { display: block; }
-    
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+  <link rel="stylesheet" href="style.css"> </head>
+<body>
 
-    .input-style {
-      background-color: #f8fafc;
-      border: 1.5px solid #e2e8f0;
-      transition: all 0.3s;
-    }
-    .input-style:focus {
-      border-color: var(--secondary);
-      background-color: white;
-      box-shadow: 0 0 0 3px rgba(98, 159, 173, 0.2);
-    }
-    
-    .btn-primary {
-      background-color: var(--primary);
-      transition: all 0.2s;
-    }
-    .btn-primary:active { transform: scale(0.96); }
+<div class="app-container">
+  <header class="header">
+    <h1 class="moya-logo">MOYA</h1>
+    <p class="tagline">dari mata air pegunungan turi</p>
+  </header>
 
-    .nav-active { color: var(--primary) !important; font-weight: bold; }
-    .nav-active i { transform: translateY(-3px); color: var(--primary); }
-  </style>
-</head>
-<body class="pb-20">
-
-  <div class="app-container">
-    <div class="header-curve shadow-lg">
-      <h1 class="text-4xl font-black tracking-tighter">MOYA</h1>
-      <p class="text-[10px] uppercase tracking-[3px] opacity-80 mt-1">Dari mata air pegunungan Turi</p>
-    </div>
-
-    <main class="mt-[-40px]">
-      
-      <section id="kas" class="page active">
-        <div class="bg-white p-6 rounded-[30px] shadow-xl border border-gray-100">
-          <div class="flex items-center gap-2 mb-6 text-[var(--primary)]">
-            <i class="fas fa-wallet text-xl"></i>
-            <h2 class="font-bold text-lg">Catat Transaksi</h2>
-          </div>
-
-          <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Tanggal</label>
-          <input type="date" id="k-tgl" class="input-style w-full p-3 rounded-2xl mb-4 outline-none">
-
-          <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Jenis</label>
-          <div class="flex gap-2 mb-4">
-            <button onclick="setType('Masuk')" id="btn-masuk" class="flex-1 p-3 rounded-2xl border-2 border-[var(--primary)] bg-[var(--primary)] text-white font-bold text-sm">Masuk</button>
-            <button onclick="setType('Keluar')" id="btn-keluar" class="flex-1 p-3 rounded-2xl border-2 border-gray-100 text-gray-400 font-bold text-sm">Keluar</button>
-          </div>
-
-          <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Nominal</label>
-          <div class="relative mb-4">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-400">Rp</span>
-            <input type="number" id="k-amt" class="input-style w-full p-3 pl-12 rounded-2xl font-bold text-lg outline-none" placeholder="0">
-          </div>
-
-          <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Keterangan</label>
-          <textarea id="k-desc" class="input-style w-full p-3 rounded-2xl mb-6 outline-none" rows="2" placeholder="Catatan..."></textarea>
-
-          <button onclick="kirimKas()" id="btn-save" class="btn-primary w-full py-4 rounded-2xl text-white font-bold shadow-lg uppercase tracking-widest text-sm">
-            Simpan Data
-          </button>
+  <div class="content">
+    <section id="kas" class="page active">
+      <div class="card">
+        <h3 style="color:var(--deep); margin-top:0;"><i class="fas fa-wallet"></i> KAS MOYA</h3>
+        
+        <span class="label">Tanggal Transaksi</span>
+        <input type="date" id="k-tgl">
+        
+        <span class="label">Aliran Dana</span>
+        <div class="type-box">
+          <button onclick="setType('Masuk')" id="b-masuk" class="btn-type active">MASUK</button>
+          <button onclick="setType('Keluar')" id="b-keluar" class="btn-type">KELUAR</button>
         </div>
-      </section>
 
-      <section id="pelanggan" class="page">
-        <div class="bg-white p-6 rounded-[30px] shadow-xl border border-gray-100">
-          <div class="flex items-center gap-2 mb-6 text-[var(--primary)]">
-            <i class="fas fa-user-plus text-xl"></i>
-            <h2 class="font-bold text-lg">Data Pelanggan</h2>
-          </div>
-          
-          <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Nama</label>
-          <input type="text" id="p-nama" class="input-style w-full p-3 rounded-2xl mb-4 outline-none" placeholder="Nama lengkap">
+        <span class="label">Nominal (Rp)</span>
+        <input type="number" id="k-amt" placeholder="Masukkan angka...">
+        
+        <span class="label">Keterangan</span>
+        <textarea id="k-desc" placeholder="Contoh: Penjualan 20 Galon"></textarea>
+        
+        <button onclick="sendData('KAS')" id="btn-kas" class="btn-main">SIMPAN DATA</button>
+      </div>
+    </section>
 
-          <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">WhatsApp</label>
-          <input type="tel" id="p-wa" class="input-style w-full p-3 rounded-2xl mb-6 outline-none" placeholder="08xxxx">
-
-          <button onclick="kirimCust()" class="btn-primary w-full py-4 rounded-2xl text-white font-bold shadow-lg uppercase tracking-widest text-sm">
-            Tambah Pelanggan
-          </button>
-        </div>
-      </section>
-
-    </main>
-
-    <nav class="fixed bottom-0 w-full max-width-[480px] bg-white border-t border-gray-100 p-4 flex justify-around items-center z-50">
-      <button onclick="nav('kas', this)" class="nav-item nav-active flex flex-col items-center gap-1">
-        <i class="fas fa-home text-xl transition-all"></i>
-        <span class="text-[10px]">Beranda</span>
-      </button>
-      <button onclick="nav('kuitansi', this)" class="nav-item flex flex-col items-center gap-1 text-gray-300">
-        <i class="fas fa-file-invoice-dollar text-xl transition-all"></i>
-        <span class="text-[10px]">Kuitansi</span>
-      </button>
-      <button onclick="nav('pelanggan', this)" class="nav-item flex flex-col items-center gap-1 text-gray-300">
-        <i class="fas fa-users text-xl transition-all"></i>
-        <span class="text-[10px]">Pelanggan</span>
-      </button>
-    </nav>
+    <section id="pelanggan" class="page">
+      <div class="card">
+        <h3 style="color:var(--deep); margin-top:0;"><i class="fas fa-users"></i> Registrasi Pelanggan</h3>
+        <span class="label">Nama Lengkap</span>
+        <input type="text" id="p-nama" placeholder="Input nama...">
+        <span class="label">Nomor WhatsApp</span>
+        <input type="tel" id="p-wa" placeholder="08xxxxxxxx">
+        <button onclick="sendData('Pelanggan')" id="btn-cust" class="btn-main">TAMBAH PELANGGAN</button>
+      </div>
+    </section>
   </div>
 
-  <script>
-    let currentType = 'Masuk';
-    document.getElementById('k-tgl').valueAsDate = new Date();
+  <nav>
+    <button onclick="nav('kas', this)" class="nav-btn active">
+      <i class="fas fa-home"></i><span>Beranda</span>
+    </button>
+    <button onclick="nav('pelanggan', this)" class="nav-btn">
+      <i class="fas fa-user-friends"></i><span>Pelanggan</span>
+    </button>
+  </nav>
+</div>
 
-    function nav(pageId, el) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('nav-active', 'text-gray-300'));
-      document.getElementById(pageId).classList.add('active');
-      el.classList.add('nav-active');
-      document.querySelectorAll('.nav-item:not(.nav-active)').forEach(n => n.classList.add('text-gray-300'));
+<script>
+  const WEB_APP_URL = "URL_GAS_WEB_APP_LO"; // Pastikan sudah diganti!
+  let currentType = 'Masuk';
+  document.getElementById('k-tgl').valueAsDate = new Date();
+
+  function nav(id, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function setType(t) {
+    currentType = t;
+    document.getElementById('b-masuk').classList.toggle('active', t === 'Masuk');
+    document.getElementById('b-keluar').classList.toggle('active', t === 'Keluar');
+  }
+
+  async function sendData(target) {
+    const btn = event.target;
+    let payload = { sheet: target, data: [] };
+
+    if(target === 'KAS') {
+      const amt = document.getElementById('k-amt').value;
+      if(!amt) return alert("Isi nominalnya dulu!");
+      payload.data = [document.getElementById('k-tgl').value, currentType, amt, document.getElementById('k-desc').value, new Date()];
+    } else {
+      const nama = document.getElementById('p-nama').value;
+      if(!nama) return alert("Nama jangan kosong!");
+      payload.data = [nama, document.getElementById('p-wa').value, new Date()];
     }
 
-    function setType(t) {
-      currentType = t;
-      const bM = document.getElementById('btn-masuk');
-      const bK = document.getElementById('btn-keluar');
-      if(t === 'Masuk') {
-        bM.className = "flex-1 p-3 rounded-2xl border-2 border-[var(--primary)] bg-[var(--primary)] text-white font-bold text-sm";
-        bK.className = "flex-1 p-3 rounded-2xl border-2 border-gray-100 text-gray-400 font-bold text-sm";
-      } else {
-        bK.className = "flex-1 p-3 rounded-2xl border-2 border-[var(--primary)] bg-[var(--primary)] text-white font-bold text-sm";
-        bM.className = "flex-1 p-3 rounded-2xl border-2 border-gray-100 text-gray-400 font-bold text-sm";
-        // Warna merah tipis buat keluar biar beda dikit
-        bK.style.backgroundColor = "#e11d48"; bK.style.borderColor = "#e11d48";
-      }
-    }
+    btn.disabled = true; btn.innerText = "SEDANG MENYIMPAN...";
 
-    function kirimKas() {
-      const btn = document.getElementById('btn-save');
-      const data = [document.getElementById('k-tgl').value, currentType, document.getElementById('k-amt').value, document.getElementById('k-desc').value];
-      if(!data[2]) return alert("Nominal wajib diisi!");
-      
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
-      
-      google.script.run.withSuccessHandler(() => {
-        alert("Data MOYA tersimpan!");
-        btn.disabled = false;
-        btn.innerHTML = "Simpan Data";
-        document.getElementById('k-amt').value = '';
-        document.getElementById('k-desc').value = '';
-      }).saveData('KAS', data);
+    try {
+      await fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(payload)
+      });
+      alert("Berhasil! Data " + target + " MOYA sudah masuk.");
+      if(target === 'KAS') { document.getElementById('k-amt').value = ''; document.getElementById('k-desc').value = ''; }
+      else { document.getElementById('p-nama').value = ''; document.getElementById('p-wa').value = ''; }
+    } catch (e) {
+      alert("Error: " + e.toString());
+    } finally {
+      btn.disabled = false; btn.innerText = "SIMPAN DATA";
     }
-  </script>
+  }
+</script>
 </body>
-            </html>
-            
+</html>
