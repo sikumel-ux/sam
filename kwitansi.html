@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Kuitansi Resmi MOYA</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00B7EB;
+      --grad-end: #008fa4;
+      --deep: #006b7a;
+      --bg: #f0f9ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .receipt-container {
+      background: white;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 35px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    /* Header Styling */
+    .receipt-header {
+      background: linear-gradient(135deg, var(--primary), var(--grad-end));
+      padding: 45px 20px;
+      text-align: center;
+      color: white;
+      border-bottom-left-radius: 80px;
+      position: relative;
+    }
+
+    .receipt-header h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: -2px;
+      text-shadow: 2px 3px var(--deep);
+      line-height: 1;
+    }
+
+    .receipt-header p {
+      margin: 8px 0 0;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      opacity: 0.9;
+    }
+
+    .receipt-body {
+      padding: 35px 30px;
+      position: relative;
+    }
+
+    .receipt-id {
+      position: absolute;
+      top: -20px;
+      right: 30px;
+      background: white;
+      padding: 10px 18px;
+      border-radius: 18px;
+      font-weight: 900;
+      font-size: 12px;
+      color: var(--deep);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      border: 1px solid #f0f0f0;
+    }
+
+    .info-group { margin-bottom: 25px; }
+
+    .info-label {
+      font-size: 11px;
+      color: #a0aec0;
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 6px;
+      display: block;
+      letter-spacing: 1px;
+    }
+
+    .info-value {
+      font-size: 16px;
+      color: #2d3436;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* Box Nominal */
+    .amount-card {
+      background: #f0faff;
+      border-radius: 25px;
+      padding: 25px;
+      border: 2px dashed var(--primary);
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .amount-card h2 {
+      margin: 5px 0 0;
+      font-size: 32px;
+      color: var(--primary);
+      font-weight: 900;
+    }
+
+    .receipt-footer {
+      background: #fafafa;
+      padding: 25px 30px;
+      border-top-right-radius: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .verified {
+      color: #00b894;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-print {
+      position: fixed;
+      bottom: 25px;
+      background: var(--deep);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: 0.3s;
+      z-index: 999;
+    }
+
+    .btn-print:hover { transform: translateY(-3px); }
+
+    /* Loading State */
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    @media print {
+      .btn-print { display: none; }
+      body { background: white; padding: 0; }
+      .receipt-container { box-shadow: none; border: none; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loading">
+    <i class="fas fa-circle-notch fa-spin fa-3x" style="color: var(--primary);"></i>
+    <p style="margin-top: 15px; font-weight: 600; color: var(--deep);">Memuat Kuitansi...</p>
+  </div>
+
+  <div class="receipt-container" id="receipt" style="display: none;">
+    <div class="receipt-header">
+      <h1>MOYA</h1>
+      <p>Mata Air Pegunungan Turi</p>
+    </div>
+
+    <div class="receipt-body">
+      <div class="receipt-id" id="v-id">M-----</div>
+
+      <div class="info-group">
+        <span class="info-label">Diterima Dari:</span>
+        <div class="info-value" id="v-nama" style="font-size: 22px; color: var(--deep); font-weight: 900;">...</div>
+      </div>
+
+      <div class="info-group">
+        <span class="info-label">Untuk Pembayaran:</span>
+        <div class="info-value" id="v-ket">...</div>
+      </div>
+
+      <div class="amount-card">
+        <span class="info-label" style="color: var(--primary);">Total Pembayaran</span>
+        <h2 id="v-amt">Rp 0</h2>
+      </div>
+
+      <div class="info-group" style="margin-bottom: 0;">
+        <span class="info-label">Waktu Transaksi:</span>
+        <div class="info-value" id="v-tgl" style="font-size: 14px;">...</div>
+      </div>
+    </div>
+
+    <div class="receipt-footer">
+      <div class="verified">
+        <i class="fas fa-check-circle"></i> E-KUITANSI RESMI
+      </div>
+      <div style="text-align: right;">
+        <img src="" id="v-qr" width="55" style="border-radius: 8px; border: 1px solid #eee;">
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-print" onclick="window.print()">
+    <i class="fas fa-print"></i> CETAK KUITANSI
+  </button>
+
+  <script>
+    // URL Web App lo
+    const API_URL = "https://script.google.com/macros/s/AKfycbxsUJ_vgSx3m1sXCcHkbBN-gFPyt5EjO2IMTXbHQPeWOEcqoy544jAB5XPznrfh6018cw/exec";
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const trxId = urlParams.get('id');
+
+    async function loadReceipt() {
+      const loader = document.getElementById('loading');
+      const container = document.getElementById('receipt');
+
+      if (!trxId) {
+        loader.innerHTML = "<i class='fas fa-exclamation-triangle fa-3x' style='color:orange'></i><p>ID Transaksi Kosong!</p>";
+        return;
+      }
+      
+      try {
+        // Tambahkan parameter id ke fetch
+        const res = await fetch(`${API_URL}?id=${trxId}`);
+        const data = await res.json();
+        
+        if(data.error || !data.id) {
+          loader.innerHTML = "<i class='fas fa-search-minus fa-3x' style='color:red'></i><p>Data Tidak Ditemukan</p>";
+          return;
+        }
+
+        // Isi data ke elemen
+        document.getElementById('v-id').innerText = data.id;
+        document.getElementById('v-nama').innerText = data.nama || "Pelanggan";
+        document.getElementById('v-ket').innerText = data.ket || "Penjualan Galon MOYA";
+        
+        // Handling Nominal
+        const nominal = Number(data.nominal);
+        document.getElementById('v-amt').innerText = "Rp " + (isNaN(nominal) ? "0" : nominal.toLocaleString('id-ID'));
+        
+        // Handling Tanggal
+        const tglObj = new Date(data.tgl);
+        if(!isNaN(tglObj)) {
+          document.getElementById('v-tgl').innerText = tglObj.toLocaleDateString('id-ID', { 
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+          });
+        } else {
+          document.getElementById('v-tgl').innerText = data.tgl || "-";
+        }
+        
+        // QR Code
+        document.getElementById('v-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${window.location.href}`;
+        
+        // Munculkan container
+        loader.style.display = 'none';
+        container.style.display = 'block';
+        
+      } catch (e) {
+        console.error(e);
+        loader.innerHTML = "<i class='fas fa-wifi fa-3x' style='color:red'></i><p>Gagal Koneksi ke Server</p>";
+      }
+    }
+
+    window.onload = loadReceipt;
+  </script>
+</body>
+  </html>
+  
