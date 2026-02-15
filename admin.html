@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Admin MOYA</title>
-  <link rel="stylesheet" href="admin.css">
-  <link rel="stylesheet" href="admin.js">
+  <title>MOYA Admin</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -14,62 +13,66 @@
 
 <div class="app-container">
   <header class="header">
-    <div class="header-content">
-      <div class="brand">
-        <h1>MOYA</h1>
-        <p><i class="fas fa-user-circle"></i> <span id="display-role"></span></p>
-      </div>
-      <div class="header-right">
-        <div id="saldo-box" class="saldo-box">
-          <small>SALDO KAS</small>
-          <div id="q-total">Rp 0</div>
-        </div>
-        <button onclick="logout()" class="btn-logout" title="Logout">
-          <i class="fas fa-sign-out-alt"></i>
-        </button>
-      </div>
+    <div style="position: absolute; top: 20px; right: 20px;">
+      <button onclick="logout()" style="background:rgba(255,255,255,0.2); border:none; color:white; padding:10px; border-radius:12px; cursor:pointer;">
+        <i class="fas fa-power-off"></i>
+      </button>
     </div>
+    <h1 class="moya-logo">MOYA</h1>
+    <p class="tagline">Panel <span id="display-role"></span> | <span id="q-total">Rp 0</span></p>
   </header>
 
   <main class="content">
     <section id="jual" class="page active">
       <div class="card">
-        <h3><i class="fas fa-shopping-basket"></i> Input Jual</h3>
+        <h3 style="color:var(--text-deep); margin-top:0;"><i class="fas fa-shopping-cart"></i> Input Penjualan</h3>
+        <span class="label">Tanggal</span>
         <input type="date" id="t-tgl">
-        <input type="text" id="t-nama" placeholder="Nama Konsumen">
-        <input type="tel" id="t-wa" placeholder="WhatsApp (08...)" inputmode="tel">
-        <input type="number" id="t-amt" placeholder="Nominal Rp" inputmode="numeric">
-        <textarea id="t-desc" placeholder="Keterangan Produk" rows="2"></textarea>
-        <button onclick="simpanTrx()" id="btn-trx" class="btn-submit">SIMPAN & WA</button>
+        <span class="label">Nama Pelanggan</span>
+        <input type="text" id="t-nama" placeholder="Contoh: Budi Santoso">
+        <span class="label">WhatsApp</span>
+        <input type="tel" id="t-wa" placeholder="08xxxxxxxxxx" inputmode="tel">
+        <span class="label">Nominal (Rp)</span>
+        <input type="number" id="t-amt" placeholder="Masukan angka saja" inputmode="numeric">
+        <span class="label">Keterangan</span>
+        <textarea id="t-desc" placeholder="Rincian pesanan..." rows="2"></textarea>
+        <button onclick="simpanTrx()" id="btn-trx" class="btn-submit">SIMPAN & KIRIM WA</button>
       </div>
     </section>
 
     <section id="kas" class="page">
       <div class="card">
-        <h3><i class="fas fa-wallet"></i> Kas Internal</h3>
+        <h3 style="color:var(--text-deep); margin-top:0;"><i class="fas fa-wallet"></i> Kas Internal</h3>
+        <span class="label">Tanggal</span>
         <input type="date" id="k-tgl">
+        <span class="label">Jenis Transaksi</span>
         <select id="k-jenis">
-          <option value="Masuk">Uang Masuk</option>
-          <option value="Keluar">Uang Keluar</option>
+          <option value="Masuk">Uang Masuk (Lain-lain)</option>
+          <option value="Keluar">Uang Keluar (Biaya)</option>
         </select>
-        <input type="number" id="k-amt" placeholder="Nominal Rp" inputmode="numeric">
-        <textarea id="k-desc" placeholder="Keterangan" rows="2"></textarea>
-        <button onclick="simpanKas()" id="btn-kas" class="btn-submit">SIMPAN KAS</button>
+        <span class="label">Nominal (Rp)</span>
+        <input type="number" id="k-amt" placeholder="Masukan angka saja" inputmode="numeric">
+        <span class="label">Keterangan</span>
+        <textarea id="k-desc" placeholder="Keperluan..." rows="2"></textarea>
+        <button onclick="simpanKas()" id="btn-kas" class="btn-submit">CATAT KAS</button>
       </div>
     </section>
 
     <section id="laporan" class="page">
       <div class="card">
-        <h3><i class="fas fa-history"></i> Riwayat</h3>
-        <div id="log-data"></div>
+        <h3 style="color:var(--text-deep); margin-top:0;"><i class="fas fa-list-ul"></i> Riwayat</h3>
+        <div id="log-data" style="margin-top:10px;"></div>
       </div>
     </section>
 
     <section id="user" class="page">
       <div class="card">
-        <h3><i class="fas fa-users-cog"></i> Kelola Karyawan</h3>
-        <input type="text" id="new-u" placeholder="Username">
-        <input type="text" id="new-p" placeholder="Password">
+        <h3 style="color:var(--text-deep); margin-top:0;"><i class="fas fa-user-shield"></i> Tambah User</h3>
+        <span class="label">Username</span>
+        <input type="text" id="new-u" placeholder="Username baru">
+        <span class="label">Password</span>
+        <input type="text" id="new-p" placeholder="Password baru">
+        <span class="label">Hak Akses</span>
         <select id="new-r">
           <option value="karyawan">Karyawan</option>
           <option value="admin">Admin</option>
@@ -79,15 +82,15 @@
     </section>
   </main>
 
-  <nav class="bottom-nav">
+  <nav>
     <button onclick="nav('jual', this)" class="nav-item active"><i class="fas fa-plus-circle"></i><span>Jual</span></button>
     <button id="nav-kas" onclick="nav('kas', this)" class="nav-item"><i class="fas fa-exchange-alt"></i><span>Kas</span></button>
-    <button id="nav-lap" onclick="nav('laporan', this)" class="nav-item"><i class="fas fa-file-invoice"></i><span>Laporan</span></button>
-    <button id="nav-user" onclick="nav('user', this)" class="nav-item"><i class="fas fa-user-shield"></i><span>User</span></button>
+    <button id="nav-lap" onclick="nav('laporan', this)" class="nav-item"><i class="fas fa-file-invoice"></i><span>Riwayat</span></button>
+    <button id="nav-user" onclick="nav('user', this)" class="nav-item"><i class="fas fa-users-cog"></i><span>User</span></button>
   </nav>
 </div>
 
 <script src="admin.js"></script>
 </body>
-  </html>
+          </html>
   
