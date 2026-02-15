@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Admin MOYA</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<script>if(sessionStorage.getItem("isLoggedIn")!=="true") window.location.href="index.html";</script>
+
+<div class="app-container">
+  <header class="header">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div><h1 class="moya-logo">MOYA</h1><p class="tagline">Panel: <span id="display-role"></span></p></div>
+      <div id="saldo-box" style="text-align:right"><small>Saldo Kas</small><div id="q-total" style="font-weight:900;">Rp 0</div></div>
+    </div>
+  </header>
+
+  <main class="content">
+    <section id="jual" class="page active">
+      <div class="card">
+        <h3><i class="fas fa-shopping-cart"></i> Input Jual</h3>
+        <input type="date" id="t-tgl">
+        <input type="text" id="t-nama" placeholder="Nama Konsumen">
+        <input type="tel" id="t-wa" placeholder="WhatsApp (08...)">
+        <input type="number" id="t-amt" placeholder="Nominal Rp">
+        <textarea id="t-desc" placeholder="Keterangan Produk"></textarea>
+        <button onclick="simpanTrx()" class="btn-submit">SIMPAN & KIRIM WA</button>
+      </div>
+    </section>
+
+    <section id="kas" class="page">
+      <div class="card">
+        <h3><i class="fas fa-cash-register"></i> Kas Internal</h3>
+        <input type="date" id="k-tgl">
+        <select id="k-jenis"><option value="Masuk">Uang Masuk</option><option value="Keluar">Uang Keluar</option></select>
+        <input type="number" id="k-amt" placeholder="Nominal Rp">
+        <textarea id="k-desc" placeholder="Keterangan"></textarea>
+        <button onclick="simpanKas()" class="btn-submit">SIMPAN KAS</button>
+      </div>
+    </section>
+
+    <section id="laporan" class="page">
+      <div class="card">
+        <h3><i class="fas fa-history"></i> Riwayat</h3>
+        <div id="log-data"></div>
+      </div>
+    </section>
+
+    <section id="user" class="page">
+      <div class="card">
+        <h3><i class="fas fa-user-plus"></i> Tambah Karyawan</h3>
+        <input type="text" id="new-u" placeholder="Username Baru">
+        <input type="text" id="new-p" placeholder="Password Baru">
+        <select id="new-r"><option value="karyawan">Karyawan</option><option value="admin">Admin</option></select>
+        <button onclick="tambahUser()" class="btn-submit">DAFTARKAN USER</button>
+      </div>
+    </section>
+  </main>
+
+  <nav>
+    <button onclick="nav('jual', this)" class="nav-item active"><i class="fas fa-plus-circle"></i><span>Jual</span></button>
+    <button id="nav-kas" onclick="nav('kas', this)" class="nav-item"><i class="fas fa-wallet"></i><span>Kas</span></button>
+    <button id="nav-lap" onclick="nav('laporan', this)" class="nav-item"><i class="fas fa-history"></i><span>Laporan</span></button>
+    <button id="nav-user" onclick="nav('user', this)" class="nav-item"><i class="fas fa-user-cog"></i><span>User</span></button>
+  </nav>
+</div>
+
+<script>
+  const API = "https://script.google.com/macros/s/AKfycbxsUJ_vgSx3m1sXCcHkbBN-gFPyt5EjO2IMTXbHQPeWOEcqoy544jAB5XPznrfh6018cw/exec";
+  const role = sessionStorage.getItem("userRole");
+
+  function proteksi() {
+    document.getElementById('display-role').innerText = role.toUpperCase();
+    if(role !== 'admin') {
+      document.getElementById('nav-kas').style.display = 'none';
+      document.getElementById('nav-lap').style.display = 'none';
+      document.getElementById('nav-user').style.display = 'none';
+      document.getElementById('saldo-box').style.display = 'none';
+    }
+  }
+
+  function nav(id, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active'); el.classList.add('active');
+    if(id === 'laporan') muatLaporan();
+  }
+
+  async function tambahUser() {
+    const data = [document.getElementById('new-u').value, document.getElementById('new-p').value, document.getElementById('new-r').value];
+    if(!data[0] || !data[1]) return Swal.fire('Error', 'Lengkapi data user!', 'error');
+    
+    await fetch(API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "addUser", data }) });
+    Swal.fire('Berhasil!', 'User baru telah didaftarkan.', 'success');
+    document.getElementById('new-u').value = ''; document.getElementById('new-p').value = '';
+  }
+
+  async function simpanTrx() {
+    const id = "M" + Date.now();
+    const data = [id, document.getElementById('t-tgl').value, document.getElementById('t-nama').value, document.getElementById('t-wa').value, document.getElementById('t-amt').value, document.getElementById('t-desc').value, "Masuk", new Date().toLocaleString()];
+    await fetch(API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ data }) });
+    Swal.fire('Sukses', 'Penjualan Disimpan', 'success');
+  }
+
+  async function simpanKas() {
+    const data = ["KAS-"+Date.now(), document.getElementById('k-tgl').value, "INTERNAL", "-", document.getElementById('k-amt').value, document.getElementById('k-desc').value, document.getElementById('k-jenis').value, new Date().toLocaleString()];
+    await fetch(API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ data }) });
+    Swal.fire('Sukses', 'Kas Dicatat', 'success');
+  }
+
+  async function muatLaporan() {
+    const res = await fetch(API); const d = await res.json();
+    let html = "";
+    d.reverse().forEach(r => {
+      html += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee;">
+        <div><b>${r.nama==='INTERNAL'?r.ket:r.nama}</b><br><small>${r.tgl.split('T')[0]}</small></div>
+        <div style="text-align:right">
+          <b style="color:${r.jenis==='Masuk'?'green':'red'}">Rp ${Number(r.nominal).toLocaleString()}</b><br>
+          ${role==='admin' ? `<i class="fas fa-trash" onclick="hapus('${r.id}')" style="color:#ccc; cursor:pointer"></i>` : ''}
+        </div>
+      </div>`;
+    });
+    document.getElementById('log-data').innerHTML = html;
+  }
+
+  async function hapus(id) {
+    const cek = await Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true });
+    if(cek.isConfirmed) {
+      await fetch(API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "delete", id }) });
+      muatLaporan();
+    }
+  }
+
+  window.onload = proteksi;
+</script>
+</body>
+</html>
