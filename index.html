@@ -1,51 +1,64 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login MOYA</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body style="background: var(--primary); display: flex; align-items: center; justify-content: center; height: 100vh;">
-  <div class="card" style="width: 100%; max-width: 320px; text-align: center;">
-    <h1 style="color:var(--primary); margin-bottom:0;">MOYA</h1>
-    <p style="margin-bottom:20px; font-size:12px; color:#888;">Admin Access</p>
-    <input type="text" id="u" placeholder="Username">
-    <div style="position:relative">
-      <input type="password" id="p" placeholder="Password">
-      <i class="fas fa-eye" id="eye" onclick="togglePass()" style="position:absolute; right:15px; top:15px; color:#ccc"></i>
-    </div>
-    <button onclick="login()" id="btnLogin" class="btn-submit">MASUK</button>
-  </div>
-
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxsUJ_vgSx3m1sXCcHkbBN-gFPyt5EjO2IMTXbHQPeWOEcqoy544jAB5XPznrfh6018cw/exec";
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOYA - Mata Air Pegunungan Turi</title>
     
-    function togglePass() {
-      const p = document.getElementById('p');
-      p.type = p.type === 'password' ? 'text' : 'password';
-    }
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00B7EB">
+    
+    <link rel="stylesheet" href="landing.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
 
-    async function login() {
-      const u = document.getElementById('u').value;
-      const p = document.getElementById('p').value;
-      const btn = document.getElementById('btnLogin');
-      btn.disabled = true; btn.innerText = "Checking...";
-      
-      try {
-        const res = await fetch(`${API_URL}?action=login&u=${u}&p=${p}`);
-        const data = await res.json();
-        if(data.success) {
-          sessionStorage.setItem("isLoggedIn", "true");
-          window.location.href = "admin.html";
-        } else {
-          Swal.fire('Gagal', 'User/Pass Salah!', 'error');
-        }
-      } catch(e) { alert("Server Error"); }
-      btn.disabled = false; btn.innerText = "MASUK";
-    }
-  </script>
+    <header class="hero">
+        <nav class="navbar">
+            <div class="logo">MOYA</div>
+            <a href="admin.html" class="admin-link"><i class="fas fa-user-cog"></i></a>
+        </nav>
+        
+        <div class="hero-content">
+            <div class="img-wrapper">
+                <img src="moya.png" alt="MOYA Logo" class="floating">
+            </div>
+            <h1>Segar Langsung Dari <br><span>Pegunungan Turi</span></h1>
+            <p>Layanan air galon higienis dengan proses filtrasi alami untuk kesehatan keluarga Anda.</p>
+            
+            <div class="cta-group">
+                <a href="https://wa.me/6281234567890?text=Halo%20MOYA,%20saya%20mau%20pesan%20galon" class="btn-order">
+                    <i class="fab fa-whatsapp"></i> PESAN SEKARANG
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="feat-card">
+            <i class="fas fa-tint"></i>
+            <h3>Murni</h3>
+            <p>Air baku pilihan dari sumber mata air alami.</p>
+        </div>
+        <div class="feat-card">
+            <i class="fas fa-shuttle-van"></i>
+            <h3>Cepat</h3>
+            <p>Antar jemput galon tepat waktu sampai depan pintu.</p>
+        </div>
+        <div class="feat-card">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Higienis</h3>
+            <p>Proses pembersihan menggunakan standar medis.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 MOYA Water. All Rights Reserved.</p>
+        <div class="socials">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+    </footer>
+
 </body>
 </html>
