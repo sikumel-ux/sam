@@ -1,0 +1,143 @@
+:root {
+  --primary: #00B7EB;
+  --grad-end: #008fa4;
+  --deep: #006b7a;
+  --bg: #f0f9ff;
+}
+
+body {
+  background-color: var(--bg);
+  font-family: 'Inter', -apple-system, sans-serif;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.receipt-container {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+/* Curve Header Kuitansi */
+.receipt-header {
+  background: linear-gradient(135deg, var(--primary), var(--grad-end));
+  padding: 40px 20px;
+  text-align: center;
+  color: white;
+  border-bottom-left-radius: 80px;
+  position: relative;
+}
+
+.receipt-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-shadow: 2px 3px var(--deep);
+}
+
+.receipt-header p {
+  margin: 5px 0 0;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  opacity: 0.9;
+}
+
+.receipt-body {
+  padding: 30px;
+  position: relative;
+}
+
+.receipt-id {
+  position: absolute;
+  top: -25px;
+  right: 30px;
+  background: white;
+  padding: 8px 15px;
+  border-radius: 15px;
+  font-weight: 800;
+  font-size: 12px;
+  color: var(--deep);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+}
+
+.info-group {
+  margin-bottom: 25px;
+}
+
+.info-label {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.info-value {
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Box Nominal dengan Curve */
+.amount-card {
+  background: #f8fdff;
+  border-radius: 20px;
+  padding: 20px;
+  border: 2px dashed #00B7EB;
+  text-align: center;
+  margin: 30px 0;
+}
+
+.amount-card h2 {
+  margin: 0;
+  font-size: 28px;
+  color: var(--primary);
+  font-weight: 900;
+}
+
+.receipt-footer {
+  background: #fafafa;
+  padding: 20px 30px;
+  border-top-right-radius: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.verified {
+  color: #4caf50;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.btn-download {
+  position: fixed;
+  bottom: 20px;
+  background: var(--deep);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+@media print {
+  .btn-download { display: none; }
+  body { background: white; }
+  .receipt-container { box-shadow: none; border: 1px solid #eee; }
+    }
