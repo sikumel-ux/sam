@@ -3,13 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>MOYA - Sales & Kas</title>
-  
+  <title>MOYA - Management System</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,153 +16,142 @@
   </header>
 
   <main class="content">
-    
     <section id="kas" class="page active">
       <div class="card">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #006b7a;">
-          <i class="fas fa-cash-register text-xl"></i>
-          <h2 style="margin:0; font-size: 1.2rem;">Catat KAS</h2>
-        </div>
-
-        <span class="label">Tanggal Transaksi</span>
+        <h3 style="color:var(--text-deep); margin-top:0;"><i class="fas fa-edit"></i> Catat Transaksi</h3>
+        <span class="label">Tanggal</span>
         <input type="date" id="k-tgl">
-        
-        <span class="label">Jenis Transaksi</span>
+        <span class="label">Jenis</span>
         <div class="type-selector">
           <button onclick="setType('Masuk')" id="b-masuk" class="btn-type active">MASUK</button>
           <button onclick="setType('Keluar')" id="b-keluar" class="btn-type">KELUAR</button>
         </div>
-
-        <span class="label">Nominal (Rp)</span>
-        <input type="number" id="k-amt" placeholder="0" inputmode="numeric">
-        
+        <span class="label">Nominal</span>
+        <input type="number" id="k-amt" placeholder="Rp 0" inputmode="numeric">
         <span class="label">Keterangan</span>
-        <textarea id="k-desc" rows="3" placeholder="Contoh: Penjualan air galon..."></textarea>
-        
-        <button onclick="saveData('KAS')" id="btn-kas" class="btn-submit">
-          <i class="fas fa-save mr-2"></i> Simpan Transaksi
-        </button>
+        <textarea id="k-desc" placeholder="Contoh: Jual 10 Galon"></textarea>
+        <button onclick="prosesSimpan('KAS')" id="btn-kas" class="btn-submit">Simpan & Buat Kuitansi</button>
+      </div>
+    </section>
+
+    <section id="laporan" class="page">
+      <div class="card">
+        <h3 style="color:var(--text-deep); margin-top:0;"><i class="fas fa-chart-pie"></i> Laporan Kas</h3>
+        <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+          <input type="date" id="f-start" style="padding:10px; font-size:12px;">
+          <input type="date" id="f-end" style="padding:10px; font-size:12px;">
+          <button onclick="tarikLaporan()" class="btn-type active" style="flex:0.3;"><i class="fas fa-sync"></i></button>
+        </div>
+        <div id="rekap-box" style="display:none; background:#e0f7fa; padding:15px; border-radius:15px; margin-bottom:15px; font-size:13px;">
+          <div style="display:flex; justify-content:space-between"><span>Masuk:</span> <b id="sum-in" style="color:green">0</b></div>
+          <div style="display:flex; justify-content:space-between"><span>Keluar:</span> <b id="sum-out" style="color:red">0</b></div>
+          <hr style="border:0; border-top:1px solid #ccc; margin:5px 0">
+          <div style="display:flex; justify-content:space-between"><span>Saldo:</span> <b id="sum-total">0</b></div>
+        </div>
+        <div id="log-transaksi" style="max-height:300px; overflow-y:auto; font-size:13px;"></div>
       </div>
     </section>
 
     <section id="pelanggan" class="page">
       <div class="card">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #006b7a;">
-          <i class="fas fa-user-plus text-xl"></i>
-          <h2 style="margin:0; font-size: 1.2rem;">Data Pelanggan</h2>
-        </div>
-        
-        <span class="label">Nama Lengkap</span>
+        <h3 style="color:var(--text-deep); margin-top:0;"><i class="fas fa-user-plus"></i> Pelanggan Baru</h3>
+        <span class="label">Nama</span>
         <input type="text" id="p-nama" placeholder="Nama Pelanggan">
-        
-        <span class="label">Nomor WhatsApp</span>
-        <input type="tel" id="p-wa" placeholder="08xxxxxxxxxx" inputmode="tel">
-        
-        <button onclick="saveData('Pelanggan')" id="btn-cust" class="btn-submit">
-          <i class="fas fa-check-circle mr-2"></i> Daftarkan Pelanggan
-        </button>
+        <span class="label">WhatsApp</span>
+        <input type="tel" id="p-wa" placeholder="08xxxxxxxx">
+        <button onclick="prosesSimpan('Pelanggan')" id="btn-cust" class="btn-submit">Daftar Pelanggan</button>
       </div>
     </section>
-
   </main>
 
   <nav>
-    <button onclick="nav('kas', this)" class="nav-item active">
-      <i class="fas fa-home"></i>
-      <span>Beranda</span>
-    </button>
-    <button onclick="nav('kuitansi', this)" class="nav-item">
-      <i class="fas fa-file-invoice"></i>
-      <span>Kuitansi</span>
-    </button>
-    <button onclick="nav('pelanggan', this)" class="nav-item">
-      <i class="fas fa-users"></i>
-      <span>Pelanggan</span>
-    </button>
+    <button onclick="nav('kas', this)" class="nav-item active"><i class="fas fa-cash-register"></i><span>Kas</span></button>
+    <button onclick="nav('laporan', this)" class="nav-item"><i class="fas fa-file-alt"></i><span>Laporan</span></button>
+    <button onclick="nav('pelanggan', this)" class="nav-item"><i class="fas fa-users"></i><span>Kontak</span></button>
   </nav>
 </div>
 
 <script>
-  // URL GAS lo yang sudah dideploy sebagai Web App
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxsUJ_vgSx3m1sXCcHkbBN-gFPyt5EjO2IMTXbHQPeWOEcqoy544jAB5XPznrfh6018cw/exec";
-  
+  const API_URL = "URL_WEB_APP_GAS_LO_DISINI"; 
   let currentType = 'Masuk';
   document.getElementById('k-tgl').valueAsDate = new Date();
+  document.getElementById('f-start').valueAsDate = new Date();
+  document.getElementById('f-end').valueAsDate = new Date();
 
-  // Fungsi Navigasi Tab
-  function nav(pageId, element) {
+  function nav(id, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    
-    document.getElementById(pageId).classList.add('active');
-    element.classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
   }
 
-  // Fungsi Pilih Jenis Kas (Masuk/Keluar)
-  function setType(type) {
-    currentType = type;
-    document.getElementById('b-masuk').classList.toggle('active', type === 'Masuk');
-    document.getElementById('b-keluar').classList.toggle('active', type === 'Keluar');
+  function setType(t) {
+    currentType = t;
+    document.getElementById('b-masuk').classList.toggle('active', t === 'Masuk');
+    document.getElementById('b-keluar').classList.toggle('active', t === 'Keluar');
   }
 
-  // Fungsi Kirim Data ke Google Sheets via GAS
-  async function saveData(target) {
-    const btn = event.currentTarget;
-    const originalText = btn.innerHTML;
-    let payload = { sheet: target, data: [] };
-
-    // Validasi & Siapkan Data
-    if (target === 'KAS') {
+  async function prosesSimpan(target) {
+    const btn = event.target;
+    let dataRow = [];
+    if(target === 'KAS') {
       const amt = document.getElementById('k-amt').value;
-      if (!amt) return alert("Nominal harus diisi!");
-      payload.data = [
-        document.getElementById('k-tgl').value,
-        currentType,
-        amt,
-        document.getElementById('k-desc').value,
-        new Date().toLocaleString('id-ID')
-      ];
+      const tgl = document.getElementById('k-tgl').value;
+      const ket = document.getElementById('k-desc').value;
+      if(!amt) return alert("Isi nominal!");
+      dataRow = [tgl, currentType, amt, ket, new Date().toLocaleString()];
     } else {
-      const nama = document.getElementById('p-nama').value;
-      if (!nama) return alert("Nama tidak boleh kosong!");
-      payload.data = [
-        nama,
-        document.getElementById('p-wa').value,
-        new Date().toLocaleString('id-ID')
-      ];
+      dataRow = [document.getElementById('p-nama').value, document.getElementById('p-wa').value, new Date().toLocaleString()];
     }
 
-    // Loading State
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Memproses...';
+    btn.disabled = true; btn.innerText = "MENYIMPAN...";
 
     try {
-      await fetch(WEB_APP_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Penting untuk bypass CORS Google Apps Script
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ sheet: target, data: dataRow }) });
+      alert("Data MOYA Berhasil Disimpan!");
       
-      alert(`Berhasil! Data ${target} MOYA tersimpan.`);
-      
-      // Reset Form
-      if (target === 'KAS') {
-        document.getElementById('k-amt').value = '';
-        document.getElementById('k-desc').value = '';
-      } else {
-        document.getElementById('p-nama').value = '';
-        document.getElementById('p-wa').value = '';
+      // LOGIKA KUITANSI WHATSAPP
+      if(target === 'KAS' && currentType === 'Masuk') {
+        if(confirm("Kirim Kuitansi ke WhatsApp?")) {
+          const text = `*KUITANSI MOYA*%0A---%0ATgl: ${dataRow[0]}%0AItem: ${dataRow[3]}%0ATotal: Rp ${Number(dataRow[2]).toLocaleString()}%0A---%0ATerima Kasih!`;
+          window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
       }
-    } catch (error) {
-      alert("Waduh, koneksi bermasalah: " + error.message);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-    }
+
+      // Reset
+      document.querySelectorAll('input').forEach(i => { if(i.type !== 'date') i.value = ''; });
+    } catch (e) { alert("Error!"); }
+    finally { btn.disabled = false; btn.innerText = "SIMPAN"; }
+  }
+
+  async function tarikLaporan() {
+    const log = document.getElementById('log-transaksi');
+    log.innerHTML = "<center><i class='fas fa-spinner fa-spin'></i> Loading...</center>";
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      const start = new Date(document.getElementById('f-start').value);
+      const end = new Date(document.getElementById('f-end').value);
+      
+      let inSum = 0, outSum = 0, html = "";
+      data.forEach(item => {
+        const tglItem = new Date(item.tanggal);
+        if(tglItem >= start && tglItem <= end) {
+          const n = Number(item.nominal);
+          if(item.jenis === 'Masuk') inSum += n; else outSum += n;
+          html += `<div style="padding:8px; border-bottom:1px solid #eee; display:flex; justify-content:space-between">
+            <div><b>${item.keterangan || '-'}</b><br><small>${item.tanggal.split('T')[0]}</small></div>
+            <b style="color:${item.jenis === 'Masuk'?'green':'red'}">Rp ${n.toLocaleString()}</b>
+          </div>`;
+        }
+      });
+      document.getElementById('rekap-box').style.display = 'block';
+      document.getElementById('sum-in').innerText = "Rp " + inSum.toLocaleString();
+      document.getElementById('sum-out').innerText = "Rp " + outSum.toLocaleString();
+      document.getElementById('sum-total').innerText = "Rp " + (inSum - outSum).toLocaleString();
+      log.innerHTML = html || "Kosong.";
+    } catch (e) { log.innerHTML = "Gagal ambil data."; }
   }
 </script>
-
 </body>
-            </html>
-  
+</html>
