@@ -1,82 +1,127 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <base target="_top">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-      .active-link { @apply bg-blue-700 text-white; }
-      body { background-color: #f0f7ff; }
-    </style>
-  </head>
-  <body class="flex flex-col md:flex-row min-h-screen">
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <link rel="manifest" href="<?= ScriptApp.getService().getUrl() ?>?page=manifest">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { -webkit-tap-highlight-color: transparent; background-color: #f8faff; }
+    .active-nav { color: #2563eb; transform: translateY(-5px); }
+    .active-nav i { color: #2563eb; }
+    .page { display: none; animation: fadeIn 0.3s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="pb-24">
 
-    <nav class="w-full md:w-64 bg-blue-600 text-white flex flex-col shadow-xl">
-      <div class="p-6 text-2xl font-bold border-b border-blue-500 flex items-center gap-3">
-        <i class="fas fa-store"></i> SalesApp
+  <header class="bg-blue-600 text-white p-5 rounded-b-3xl shadow-lg mb-6">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-xl font-bold">SalesApp Pro</h1>
+        <p class="text-xs text-blue-100">Halo, Bro! Kelola penjualanmu.</p>
       </div>
-      <div class="flex flex-col p-4 gap-2">
-        <button onclick="showPage('kas')" class="nav-btn p-3 rounded-lg hover:bg-blue-500 transition flex items-center gap-3">
-          <i class="fas fa-wallet w-6"></i> Form KAS
-        </button>
-        <button onclick="showPage('kuitansi')" class="nav-btn p-3 rounded-lg hover:bg-blue-500 transition flex items-center gap-3">
-          <i class="fas fa-file-invoice-dollar w-6"></i> Kuitansi
-        </button>
-        <button onclick="showPage('pelanggan')" class="nav-btn p-3 rounded-lg hover:bg-blue-500 transition flex items-center gap-3">
-          <i class="fas fa-users w-6"></i> Data Pelanggan
-        </button>
+      <div class="bg-white/20 p-2 rounded-full">
+        <i class="fas fa-bell"></i>
       </div>
-    </nav>
+    </div>
+  </header>
 
-    <main class="flex-1 p-6 md:p-10">
+  <main class="px-5">
+    
+    <section id="kas" class="page active">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50">
+        <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-wallet text-blue-600 mr-2"></i>Catat KAS</h2>
+        
+        <label class="block text-sm text-gray-500 mb-1">Tanggal</label>
+        <input type="date" id="k-tgl" class="w-full mb-4 p-3 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-blue-400">
+
+        <label class="block text-sm text-gray-500 mb-1">Tipe</label>
+        <div class="flex gap-2 mb-4">
+          <button onclick="setType('Masuk')" id="btn-masuk" class="flex-1 p-3 rounded-xl border-2 border-green-500 bg-green-50 text-green-600 font-bold">Masuk</button>
+          <button onclick="setType('Keluar')" id="btn-keluar" class="flex-1 p-3 rounded-xl border-2 border-gray-100 text-gray-400 font-bold">Keluar</button>
+        </div>
+
+        <label class="block text-sm text-gray-500 mb-1">Nominal</label>
+        <input type="number" id="k-amt" placeholder="Rp 0" class="w-full mb-4 p-3 bg-gray-50 rounded-xl font-bold text-lg outline-none focus:ring-2 focus:ring-blue-400">
+
+        <label class="block text-sm text-gray-500 mb-1">Keterangan</label>
+        <textarea id="k-desc" class="w-full mb-6 p-3 bg-gray-50 rounded-xl outline-none" placeholder="Catatan transaksi..."></textarea>
+
+        <button onclick="kirimKas()" id="btn-save" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200 uppercase">Simpan</button>
+      </div>
+    </section>
+
+    <section id="pelanggan" class="page">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-blue-50">
+        <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-user-plus text-blue-600 mr-2"></i>Data Pelanggan</h2>
+        <input type="text" id="p-nama" placeholder="Nama Pelanggan" class="w-full mb-4 p-3 bg-gray-50 rounded-xl outline-none">
+        <input type="tel" id="p-wa" placeholder="Nomor WhatsApp (08xxx)" class="w-full mb-6 p-3 bg-gray-50 rounded-xl outline-none">
+        <button onclick="kirimCust()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200 uppercase">Tambah Pelanggan</button>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-6 py-3 flex justify-between items-center shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+    <button onclick="nav('kas')" class="nav-item active-nav flex flex-col items-center gap-1 transition-all">
+      <i class="fas fa-home text-xl"></i><span class="text-[10px] font-bold">Beranda</span>
+    </button>
+    <button onclick="nav('kuitansi')" class="nav-item flex flex-col items-center gap-1 text-gray-400 transition-all">
+      <i class="fas fa-file-invoice text-xl"></i><span class="text-[10px] font-bold">Kuitansi</span>
+    </button>
+    <button onclick="nav('pelanggan')" class="nav-item flex flex-col items-center gap-1 text-gray-400 transition-all">
+      <i class="fas fa-users text-xl"></i><span class="text-[10px] font-bold">Pelanggan</span>
+    </button>
+  </nav>
+
+  <script>
+    let currentType = 'Masuk';
+    
+    // Auto-set tanggal hari ini
+    document.getElementById('k-tgl').valueAsDate = new Date();
+
+    function nav(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav', 'text-gray-400'));
       
-      <section id="page-kas" class="content-page">
-        <h2 class="text-2xl font-bold text-blue-800 mb-6 underline decoration-blue-300">Input Transaksi KAS</h2>
-        <div class="bg-white p-6 rounded-xl shadow-md max-w-lg">
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2">Jumlah (Rp)</label>
-            <input type="number" id="kas-amount" class="w-full border-2 border-blue-100 p-2 rounded-lg focus:border-blue-500 outline-none">
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2">Keterangan</label>
-            <textarea id="kas-desc" class="w-full border-2 border-blue-100 p-2 rounded-lg focus:border-blue-500 outline-none"></textarea>
-          </div>
-          <button onclick="submitKas()" class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 uppercase tracking-wider">Simpan Kas</button>
-        </div>
-      </section>
+      document.getElementById(pageId).classList.add('active');
+      event.currentTarget.classList.add('active-nav');
+      // Set others to gray
+      document.querySelectorAll('.nav-item:not(.active-nav)').forEach(n => n.classList.add('text-gray-400'));
+    }
 
-      <section id="page-pelanggan" class="content-page hidden">
-        <h2 class="text-2xl font-bold text-blue-800 mb-6">Data Pelanggan Baru</h2>
-        <div class="bg-white p-6 rounded-xl shadow-md max-w-lg">
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2">Nama Lengkap</label>
-            <input type="text" id="cust-name" class="w-full border-2 border-blue-100 p-2 rounded-lg outline-none focus:border-blue-500">
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2">Nomor WhatsApp</label>
-            <input type="text" id="cust-wa" placeholder="0812..." class="w-full border-2 border-blue-100 p-2 rounded-lg outline-none focus:border-blue-500">
-          </div>
-          <button onclick="submitPelanggan()" class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700">Tambah Pelanggan</button>
-        </div>
-      </section>
-
-    </main>
-
-    <script>
-      function showPage(pageId) {
-        document.querySelectorAll('.content-page').forEach(p => p.classList.add('hidden'));
-        document.getElementById('page-' + pageId).classList.remove('hidden');
+    function setType(t) {
+      currentType = t;
+      const bM = document.getElementById('btn-masuk');
+      const bK = document.getElementById('btn-keluar');
+      if(t === 'Masuk') {
+        bM.className = "flex-1 p-3 rounded-xl border-2 border-green-500 bg-green-50 text-green-600 font-bold";
+        bK.className = "flex-1 p-3 rounded-xl border-2 border-gray-100 text-gray-400 font-bold";
+      } else {
+        bK.className = "flex-1 p-3 rounded-xl border-2 border-red-500 bg-red-50 text-red-600 font-bold";
+        bM.className = "flex-1 p-3 rounded-xl border-2 border-gray-100 text-gray-400 font-bold";
       }
+    }
 
-      function submitKas() {
-        const data = [new Date(), document.getElementById('kas-amount').value, document.getElementById('kas-desc').value];
-        google.script.run.withSuccessHandler(() => alert('KAS Tersimpan!')).saveData('KAS', data);
-      }
+    function kirimKas() {
+      const btn = document.getElementById('btn-save');
+      const data = [document.getElementById('k-tgl').value, currentType, document.getElementById('k-amt').value, document.getElementById('k-desc').value];
+      
+      if(!data[2]) return alert("Isi nominalnya, Bro!");
+      
+      btn.disabled = true;
+      btn.innerText = "LOADING...";
 
-      function submitPelanggan() {
-        const data = [new Date(), document.getElementById('cust-name').value, document.getElementById('cust-wa').value];
-        google.script.run.withSuccessHandler(() => alert('Pelanggan Ditambahkan!')).saveData('Pelanggan', data);
-      }
-    </script>
-  </body>
+      google.script.run.withSuccessHandler(() => {
+        alert("Mantap! Kas tersimpan.");
+        btn.disabled = false;
+        btn.innerText = "SIMPAN";
+        document.getElementById('k-amt').value = '';
+        document.getElementById('k-desc').value = '';
+      }).saveData('KAS', data);
+    }
+  </script>
+</body>
 </html>
