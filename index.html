@@ -7,30 +7,168 @@
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00B7EB">
-    
-    <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00B7EB;
+            --grad-end: #008fa4;
+            --deep: #006b7a;
+            --text: #333;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: var(--text);
+            background-color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navbar dengan Logo di Kiri */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .nav-logo img {
+            height: 40px; /* Ukuran logo di navbar */
+            width: auto;
+            display: block;
+        }
+
+        .admin-link {
+            color: #ccc;
+            font-size: 20px;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .admin-link:hover { color: var(--primary); }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 50px;
+            background: radial-gradient(circle at top right, #f0f9ff 0%, #ffffff 100%);
+            text-align: center;
+        }
+
+        .hero-content { max-width: 600px; width: 100%; }
+
+        /* Gambar Galon Tengah */
+        .img-main-wrapper { margin-bottom: 20px; }
+        .img-main-wrapper img { 
+            width: 200px; 
+            max-width: 60%;
+            height: auto; 
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin: 20px 0;
+            color: #1a1a1a;
+        }
+
+        .hero h1 span { color: var(--primary); }
+
+        .hero p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 35px;
+        }
+
+        .btn-order {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--grad-end));
+            color: white;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(0, 183, 235, 0.3);
+            transition: 0.3s;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .btn-order:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 183, 235, 0.4); }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 60px 20px;
+            background: #fafafa;
+        }
+
+        .feat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+
+        .feat-card i { font-size: 32px; color: var(--primary); margin-bottom: 15px; }
+        .feat-card h3 { margin: 10px 0; font-weight: 800; }
+        .feat-card p { font-size: 14px; color: #777; margin: 0; }
+
+        footer { padding: 40px 20px; text-align: center; border-top: 1px solid #eee; font-size: 12px; color: #aaa; }
+
+        .floating { animation: float 4s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 3.5rem; }
+            .features { grid-template-columns: repeat(3, 1fr); padding: 80px 10%; }
+            .navbar { padding: 20px 10%; }
+        }
+    </style>
 </head>
 <body>
 
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">
+            <img src="moya.png" alt="MOYA Logo">
+        </a>
+        <a href="admin.html" class="admin-link"><i class="fas fa-cog"></i></a>
+    </nav>
+
     <header class="hero">
-        <nav class="navbar">
-            <div class="logo">MOYA</div>
-            <a href="admin.html" class="admin-link"><i class="fas fa-user-cog"></i></a>
-        </nav>
-        
         <div class="hero-content">
-            <div class="img-wrapper">
+            <div class="img-main-wrapper">
                 <img src="moya.png" alt="MOYA Logo" class="floating">
             </div>
             <h1>Segar Langsung Dari <br><span>Pegunungan Turi</span></h1>
             <p>Layanan air galon higienis dengan proses filtrasi alami untuk kesehatan keluarga Anda.</p>
             
-            <div class="cta-group">
-                <a href="https://wa.me/6281234567890?text=Halo%20MOYA,%20saya%20mau%20pesan%20galon" class="btn-order">
-                    <i class="fab fa-whatsapp"></i> PESAN SEKARANG
-                </a>
-            </div>
+            <a href="https://wa.me/628XXXXXXXXXX?text=Halo%20MOYA,%20saya%20mau%20pesan%20galon" class="btn-order">
+                <i class="fab fa-whatsapp"></i> PESAN SEKARANG
+            </a>
         </div>
     </header>
 
@@ -41,23 +179,19 @@
             <p>Air baku pilihan dari sumber mata air alami.</p>
         </div>
         <div class="feat-card">
-            <i class="fas fa-shuttle-van"></i>
+            <i class="fas fa-truck"></i>
             <h3>Cepat</h3>
-            <p>Antar jemput galon tepat waktu sampai depan pintu.</p>
+            <p>Antar jemput tepat waktu sampai depan pintu.</p>
         </div>
         <div class="feat-card">
             <i class="fas fa-shield-alt"></i>
             <h3>Higienis</h3>
-            <p>Proses pembersihan menggunakan standar medis.</p>
+            <p>Proses pembersihan standar medis.</p>
         </div>
     </section>
 
     <footer>
         <p>&copy; 2026 MOYA Water. All Rights Reserved.</p>
-        <div class="socials">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-        </div>
     </footer>
 
 </body>
