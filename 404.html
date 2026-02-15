@@ -1,26 +1,91 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404</title>
-    <link rel="stylesheet" href="404.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+:root {
+    --primary: #00B7EB;
+    --grad-end: #008fa4;
+    --deep: #006b7a;
+    --white: #ffffff;
+}
 
-    <div class="container">
-        <div class="img-container">
-            <img src="moya.png" alt="MOYA Logo">
-        </div>
-        
-        <h1>404</h1>
-        <h2>Waduh, nyasar Bro!</h2>
-        
-        <a href="index.html" class="btn-back">
-            <i class="fas fa-home"></i> Kembali
-        </a>
-    </div>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--white); /* Background Putih Polos */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: var(--deep);
+    text-align: center;
+}
 
-</body>
-</html>
+.container {
+    max-width: 400px;
+    padding: 20px;
+}
+
+/* Gambar tanpa bayangan */
+.img-container {
+    margin-bottom: 20px;
+    animation: float 4s ease-in-out infinite;
+}
+
+.img-container img {
+    width: 150px;
+    height: auto;
+    filter: none; /* Bayangan dihapus sesuai request */
+}
+
+h1 {
+    font-size: 100px;
+    margin: 0;
+    color: var(--primary);
+    font-weight: 900;
+    line-height: 0.8;
+    letter-spacing: -5px;
+}
+
+h2 {
+    margin: 20px 0 10px;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+p {
+    color: #666;
+    margin-bottom: 35px;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* Tombol tetap konsisten dengan tema Admin */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--grad-end));
+    color: white;
+    text-decoration: none;
+    padding: 16px 35px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 20px rgba(0, 183, 235, 0.2);
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-back:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 183, 235, 0.3);
+}
+
+.btn-back:active {
+    transform: scale(0.95);
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
