@@ -1,0 +1,15 @@
+{
+  "name": "MOYA System",
+  "short_name": "MOYA",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#00B7EB",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3105/3105807.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
