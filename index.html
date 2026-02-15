@@ -51,7 +51,7 @@
 
     <section id="kas" class="page">
       <div class="card">
-        <h3 style="color:var(--deep);"><i class="fas fa-wallet"></i> Input Kas Internal</h3>
+        <h3 style="color:var(--deep);"><i class="fas fa-wallet"></i> Form Input Kas</h3>
         <span class="label">Tanggal</span>
         <input type="date" id="k-tgl">
         <span class="label">Jenis Arus</span>
@@ -69,10 +69,10 @@
 
     <section id="transaksi" class="page">
       <div class="card">
-        <h3 style="color:var(--deep);"><i class="fas fa-receipt"></i> Penjualan (Kuitansi)</h3>
+        <h3 style="color:var(--deep);"><i class="fas fa-receipt"></i> Penjualan</h3>
         <span class="label">Tanggal</span>
         <input type="date" id="t-tgl">
-        <span class="label">Nama Konsumen</span>
+        <span class="label">Nama</span>
         <input type="text" id="t-nama" placeholder="Fufufafa">
         <span class="label">No. WhatsApp</span>
         <input type="tel" id="t-wa" placeholder="08xxxxxxxxxx">
@@ -144,7 +144,7 @@
 
     let fw = wa.startsWith('0') ? '62' + wa.substring(1) : wa;
     const link = `${GITHUB_URL}/kuitansi.html?id=${idTrx}`;
-    const text = `*KUITANSI DIGITAL MOYA*%0A%0AHalo *${nama}*, Berikut link kuitansi pembayaran Anda:%0A%0A📄 ${link}%0A💰 Total: Rp ${Number(amt).toLocaleString('id-ID')}`;
+    const text = `*KUITANSI DIGITAL MOYA*%0A%0AHalo *${nama}*, Berikut link kuitansi pembayaran Anda:%0A%0A📄 ${link}%0A Total: Rp ${Number(amt).toLocaleString('id-ID')}`;
     
     window.open(`https://wa.me/${fw}?text=${text}`, '_blank');
     btn.disabled = false; btn.innerText = "SIMPAN & KIRIM WA";
