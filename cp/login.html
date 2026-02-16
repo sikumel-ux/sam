@@ -4,63 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Login MOYA</title>
-  <link rel="stylesheet" href="gaya.css">
+  <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="login-body">
-
   <div class="card" style="width: 100%; max-width: 380px; text-align: center;">
-    <img src="moya.png" alt="MOYA Logo" style="width: 180px; margin-bottom: 10px;">
-    <p style="margin-bottom: 30px; font-weight: 600; color: #666; font-size: 11px; letter-spacing: 1px;">PWA DASHBOARD v2.0</p>
-
+    <img src="moya.png" alt="MOYA" style="width: 180px; margin-bottom: 20px;">
+    
     <div style="text-align: left;">
       <span class="label">Username</span>
       <div class="input-group">
         <i class="fas fa-user"></i>
-        <input type="text" id="user" class="input-with-icon" placeholder="Masukkan username">
+        <input type="text" id="user" class="input-with-icon" placeholder="Username">
       </div>
 
       <span class="label">Password</span>
       <div class="input-group">
         <i class="fas fa-lock"></i>
-        <input type="password" id="pass" class="input-with-icon" placeholder="Masukkan password">
-        <i class="fas fa-eye pass-toggle" id="eyeIcon" onclick="togglePassword('pass', 'eyeIcon')" style="position: absolute; right: 15px; top: 18px; color: #ccc; cursor: pointer;"></i>
+        <input type="password" id="pass" class="input-with-icon" placeholder="Password">
+        <i class="fas fa-eye pass-toggle" id="eyeIcon" onclick="togglePassword('pass', 'eyeIcon')"></i>
       </div>
     </div>
 
-    <button onclick="prosesLogin()" class="btn-submit">MASUK SEKARANG</button>
+    <button onclick="prosesLogin()" class="btn-submit">MASUK</button>
   </div>
 
   <script src="app.js"></script>
-  
   <script>
-    // Fungsi Login Internal
     async function prosesLogin() {
-      const u = document.getElementById('user').value;
-      const p = document.getElementById('pass').value;
-      
-      if(!u || !p) return Swal.fire('Oops', 'Isi username & password!', 'warning');
-      
-      Swal.fire({title: 'Verifikasi...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
-      
-      try {
-        // API_URL diambil dari app.js
-        const res = await fetch(`${API_URL}?action=login&user=${u}&pass=${p}`);
-        const d = await res.json();
-        
-        if(d.status === 'success') {
-          sessionStorage.setItem('moya_auth', d.role);
-          sessionStorage.setItem('moya_name', d.nama);
-          window.location.href = 'admin.html';
-        } else { 
-          Swal.fire('Gagal', 'Username atau Password salah!', 'error'); 
-        }
-      } catch (e) {
-        Swal.fire('Error', 'Gagal terhubung ke database', 'error');
-      }
+      const u = document.getElementById('user').value, p = document.getElementById('pass').value;
+      if(!u || !p) return Swal.fire('Oops', 'Lengkapi data!', 'warning');
+      Swal.fire({title: 'Verifikasi...', didOpen: () => Swal.showLoading()});
+      const res = await fetch(`${API_URL}?action=login&user=${u}&pass=${p}`);
+      const d = await res.json();
+      if(d.status === 'success') {
+        sessionStorage.setItem('moya_auth', d.role);
+        sessionStorage.setItem('moya_name', d.nama);
+        window.location.href = 'admin.html';
+      } else { Swal.fire('Gagal', 'Salah user/pass!', 'error'); }
     }
   </script>
 </body>
-</html>
+  </html>
+  
