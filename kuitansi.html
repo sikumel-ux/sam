@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Kuitansi Resmi MOYA</title>
+  <link rel="stylesheet" href="kuitansi.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="receipt-container" id="receipt">
+    <div class="receipt-header">
+      <h1>MOYA</h1>
+      <p>Mata Air Pegunungan Turi</p>
+    </div>
+
+    <div class="receipt-body">
+      <div class="receipt-id" id="v-id">M-----</div>
+
+      <div class="info-group">
+        <span class="info-label">Telah Diterima Dari:</span>
+        <div class="info-value" id="v-nama" style="font-size: 20px; font-weight: 800; color: #006b7a;">Memuat...</div>
+      </div>
+
+      <div class="info-group">
+        <span class="info-label">Guna Pembayaran:</span>
+        <div class="info-value" id="v-ket">...</div>
+      </div>
+
+      <div class="amount-card" style="background: #f0f9ff; padding: 20px; border-radius: 20px; text-align: center; margin: 20px 0;">
+        <span class="info-label" style="color: #00B7EB; font-weight: 800;">JUMLAH PEMBAYARAN</span>
+        <h2 id="v-amt" style="font-size: 32px; margin: 10px 0; color: #333;">Rp 0</h2>
+      </div>
+
+      <div class="info-group">
+        <span class="info-label">Tanggal Transaksi:</span>
+        <div class="info-value" id="v-tgl">...</div>
+      </div>
+    </div>
+
+    <div class="receipt-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+      <div class="verified" style="color: #2ecc71; font-weight: 800; font-size: 12px;">
+        <i class="fas fa-check-circle"></i> VERIFIED BY MOYA
+      </div>
+      <div style="text-align: right;">
+        <img src="" id="v-qr" width="60" style="border-radius: 8px; border: 1px solid #eee;">
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 20px; text-align: center;">
+    <button class="btn-download" onclick="window.print()" style="padding: 15px 30px; border-radius: 50px; border: none; background: #00B7EB; color: white; font-weight: 800; cursor: pointer; box-shadow: 0 5px 15px rgba(0,183,235,0.3);">
+      <i class="fas fa-file-pdf"></i> SIMPAN / CETAK
+    </button>
+  </div>
+
+  <script>
+    // SINKRONKAN DENGAN API_URL DI ADMIN.HTML
+    const API_URL = "https://script.google.com/macros/s/AKfycbzwQ47v62YYbZIcUDk7hizLGN3hiqoWajxpehpZPrRBPVVhtxPgZO42TXR1d5Lh3KAN/exec";
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const trxId = urlParams.get('id');
+
+    async function loadReceipt() {
+      if (!trxId) {
+        document.getElementById('v-nama').innerText = "ID TIDAK DITEMUKAN";
+        return;
+      }
+      
+      try {
+        // Tambahkan parameter ?id= untuk mengambil data spesifik (pastikan di GS lo ada fungsi doGet untuk ID)
+        const res = await fetch(`${API_URL}?id=${trxId}`);
+        const d = await res.json();
+        
+        if (d.error || !d.id) {
+          document.getElementById('v-nama').innerText = "DATA TIDAK DITEMUKAN";
+          return;
+        }
+
+        document.getElementById('v-id').innerText = d.id;
+        document.getElementById('v-nama').innerText = d.nama.toUpperCase();
+        document.getElementById('v-ket').innerText = d.ket || "Penjualan Galon MOYA";
+        
+        const nominal = Number(d.nominal);
+        document.getElementById('v-amt').innerText = "Rp " + (isNaN(nominal) ? "0" : nominal.toLocaleString('id-ID'));
+        
+        // Parsing Tanggal biar cakep
+        const tglObj = new Date(d.tgl);
+        document.getElementById('v-tgl').innerText = isNaN(tglObj) ? d.tgl : tglObj.toLocaleDateString('id-ID', { 
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+        });
+        
+        // Generate QR Code otomatis link ke kuitansi ini sendiri
+        document.getElementById('v-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(window.location.href)}`;
+        
+      } catch (e) {
+        document.getElementById('v-nama').innerText = "KONEKSI BERMASALAH";
+      }
+    }
+    window.onload = loadReceipt;
+  </script>
+</body>
+</html>
