@@ -7,110 +7,123 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root { --primary: #00B7EB; --bg: #F8FAFC; --card: #ffffff; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
+    :root { --primary: #00B7EB; --bg: #F8FAFC; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-bottom: 90px; }
     
-    /* Header & Role Info */
-    .header { background: linear-gradient(180deg, var(--primary) 0%, #0096c7 100%); color: white; padding: 30px 20px 60px; text-align: center; border-radius: 0 0 40px 40px; }
-    .header h1 { margin: 0; font-size: 32px; letter-spacing: 2px; }
-    .header p { margin: 5px 0 0; font-size: 12px; opacity: 0.8; text-transform: uppercase; }
+    /* Header */
+    .header { background: linear-gradient(180deg, var(--primary) 0%, #0096c7 100%); color: white; padding: 30px 20px 50px; text-align: center; border-radius: 0 0 40px 40px; position: relative; }
+    .header h1 { margin: 0; font-size: 28px; letter-spacing: 2px; }
+    .header p { margin: 5px 0 0; font-size: 11px; opacity: 0.9; text-transform: uppercase; font-weight: bold; }
+    .logout-icon { position: absolute; right: 25px; top: 35px; font-size: 20px; cursor: pointer; }
 
-    /* Container Pages */
-    .page { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
+    /* Layouting */
+    .page { display: none; padding: 0 20px; animation: fadeIn 0.3s ease; }
     .page.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Card Style */
-    .card { background: var(--card); border-radius: 25px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px; margin-top: -40px; }
-    .card-title { font-weight: 800; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+    /* Card */
+    .card { background: white; border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: -30px; margin-bottom: 20px; }
+    .card-title { font-weight: 800; color: #333; margin-bottom: 20px; font-size: 18px; display: flex; align-items: center; gap: 10px; }
 
-    /* Form Elements */
-    input, select, textarea { width: 100%; padding: 14px; border-radius: 15px; border: 1px solid #eee; margin-bottom: 15px; box-sizing: border-box; font-size: 15px; background: #f9f9f9; }
-    .btn-primary { width: 100%; padding: 16px; border-radius: 50px; border: none; background: var(--primary); color: white; font-weight: 800; font-size: 16px; cursor: pointer; }
+    /* Form */
+    label { display: block; font-size: 13px; font-weight: 700; color: #666; margin-bottom: 8px; margin-left: 5px; }
+    input, select, textarea { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #eee; margin-bottom: 20px; box-sizing: border-box; font-size: 15px; background: #F9F9F9; outline: none; }
+    input:focus { border-color: var(--primary); background: white; }
+    .btn-primary { width: 100%; padding: 18px; border-radius: 50px; border: none; background: var(--primary); color: white; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 8px 20px rgba(0,183,235,0.3); }
 
-    /* Summary Grid */
-    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+    /* Summary Laporan */
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
     .sum-box { padding: 15px; border-radius: 20px; text-align: center; }
     .box-masuk { background: #E8F5E9; color: #2E7D32; }
     .box-keluar { background: #FFEBEE; color: #C62828; }
-    .box-total { grid-column: span 2; background: var(--primary); color: white; }
+    .box-total { grid-column: span 2; background: var(--primary); color: white; padding: 20px; }
+    .sum-val { font-size: 18px; font-weight: 900; display: block; margin-top: 5px; }
 
-    /* Bottom Navigation */
-    .nav-bottom { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
-    .nav-item { border: none; background: none; color: #94A3B8; text-align: center; font-size: 11px; cursor: pointer; flex: 1; transition: 0.3s; }
-    .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+    /* Nav Bar */
+    .nav-bottom { position: fixed; bottom: 0; width: 100%; background: white; display: flex; padding: 12px 0; border-top: 1px solid #f0f0f0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 100; }
+    .nav-item { border: none; background: none; color: #CBD5E1; text-align: center; font-size: 11px; font-weight: 600; flex: 1; cursor: pointer; }
+    .nav-item i { font-size: 22px; display: block; margin-bottom: 5px; }
     .nav-item.active { color: var(--primary); }
     .admin-only { display: none; }
 
-    /* History List */
-    .hist-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #f1f1f1; }
-    .hist-info b { font-size: 14px; color: #333; }
-    .hist-info small { color: #999; display: block; }
-    .btn-del { color: #ff4757; border: none; background: none; cursor: pointer; padding: 10px; }
+    /* History */
+    .hist-list { margin-top: 10px; }
+    .hist-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #F1F5F9; }
+    .hist-info b { font-size: 15px; color: #1E293B; }
+    .hist-info small { color: #94A3B8; display: block; margin-top: 2px; }
+    .btn-del { color: #FDA4AF; border: none; background: none; font-size: 18px; padding: 5px 10px; }
   </style>
 </head>
 <body>
 
   <header class="header">
-    <div style="float: right; margin-top: -5px;" onclick="logout()">
-      <i class="fas fa-sign-out-alt" style="font-size: 20px;"></i>
-    </div>
+    <div class="logout-icon" onclick="logout()"><i class="fas fa-sign-out-alt"></i></div>
     <h1>MOYA</h1>
-    <p id="role-display">LOADING...</p>
+    <p id="role-display">MEMUAT AKSES...</p>
   </header>
 
   <section id="page-laporan" class="page admin-only">
     <div class="card">
-      <div class="card-title"><i class="fas fa-chart-pie"></i> Laporan KAS</div>
-      <div style="display:flex; gap:10px; margin-bottom:15px;">
-        <input type="date" id="f-start" style="margin-bottom:0">
-        <input type="date" id="f-end" style="margin-bottom:0">
-        <button onclick="muatLaporan()" style="border-radius:12px; border:none; background:var(--primary); color:white; width:50px;"><i class="fas fa-search"></i></button>
+      <div class="card-title"><i class="fas fa-chart-line"></i> Ringkasan Saldo</div>
+      <div style="display:flex; gap:8px; margin-bottom:20px;">
+        <input type="date" id="f-start" style="margin:0">
+        <input type="date" id="f-end" style="margin:0">
+        <button onclick="muatLaporan()" style="border-radius:12px; border:none; background:var(--primary); color:white; width:55px; shrink:0"><i class="fas fa-search"></i></button>
       </div>
       <div class="summary-grid">
-        <div class="sum-box box-masuk"><small>MASUK</small><div id="sum-in" style="font-weight:900">Rp 0</div></div>
-        <div class="sum-box box-keluar"><small>KELUAR</small><div id="sum-out" style="font-weight:900">Rp 0</div></div>
-        <div class="sum-box box-total"><small>SALDO TOTAL</small><div id="sum-total" style="font-size:20px; font-weight:900">Rp 0</div></div>
+        <div class="sum-box box-masuk"><small>MASUK</small><span id="sum-in" class="sum-val">Rp 0</span></div>
+        <div class="sum-box box-keluar"><small>KELUAR</small><span id="sum-out" class="sum-val">Rp 0</span></div>
+        <div class="sum-box box-total"><small>TOTAL SALDO KAS</small><span id="sum-total" class="sum-val" style="font-size:24px">Rp 0</span></div>
       </div>
-      <div id="log-data"></div>
+      <div class="card-title" style="margin-top:20px"><i class="fas fa-history"></i> Riwayat Transaksi</div>
+      <div id="log-data" class="hist-list"></div>
     </div>
   </section>
 
   <section id="page-kas" class="page admin-only">
     <div class="card">
-      <div class="card-title"><i class="fas fa-wallet"></i> Kas Internal</div>
+      <div class="card-title"><i class="fas fa-cash-register"></i> Input Kas Internal</div>
+      <label>Tanggal Operasional</label>
       <input type="date" id="k-tgl">
+      <label>Jenis Kas</label>
       <select id="k-jenis">
-        <option value="Masuk">Pemasukan (+)</option>
         <option value="Keluar">Pengeluaran (-)</option>
+        <option value="Masuk">Pemasukan (+)</option>
       </select>
-      <input type="number" id="k-amt" placeholder="Nominal (Rp)" inputmode="numeric">
-      <textarea id="k-desc" rows="3" placeholder="Keterangan keperluan kas..."></textarea>
+      <label>Nominal Rupiah</label>
+      <input type="number" id="k-amt" placeholder="Rp 0" inputmode="numeric">
+      <label>Keterangan / Keperluan</label>
+      <textarea id="k-desc" rows="3" placeholder="Contoh: Beli bensin, bayar listrik, dll"></textarea>
       <button onclick="simpanKas()" class="btn-primary">SIMPAN DATA KAS</button>
     </div>
   </section>
 
   <section id="page-jual" class="page active">
     <div class="card">
-      <div class="card-title"><i class="fas fa-shopping-cart"></i> Transaksi Baru</div>
+      <div class="card-title"><i class="fas fa-shuttle-van"></i> Input Penjualan</div>
+      <label>Tanggal Transaksi</label>
       <input type="date" id="t-tgl">
-      <input type="text" id="t-nama" placeholder="Nama Pelanggan">
-      <input type="tel" id="t-wa" placeholder="No. WhatsApp (08xxxx)">
-      <input type="number" id="t-amt" placeholder="Total Pembayaran (Rp)" inputmode="numeric">
-      <textarea id="t-desc" rows="3" placeholder="Detail pesanan (Contoh: 5 Galon MOYA)"></textarea>
+      <label>Nama Konsumen</label>
+      <input type="text" id="t-nama" placeholder="Masukkan nama pelanggan">
+      <label>Nomor WhatsApp</label>
+      <input type="tel" id="t-wa" placeholder="08xxxxxxxxxx">
+      <label>Total Pembayaran</label>
+      <input type="number" id="t-amt" placeholder="Rp 0" inputmode="numeric">
+      <label>Detail Pesanan</label>
+      <textarea id="t-desc" rows="3" placeholder="Contoh: 10 Galon MOYA"></textarea>
       <button onclick="simpanTransaksi()" class="btn-primary">SIMPAN & KIRIM KUITANSI</button>
     </div>
   </section>
 
   <nav class="nav-bottom">
-    <button onclick="pindahTab('laporan', this)" class="nav-item admin-only" id="btn-tab-laporan">
-      <i class="fas fa-file-invoice-dollar"></i><span>Laporan</span>
+    <button onclick="pindahTab('laporan', this)" class="nav-item admin-only" id="nav-laporan">
+      <i class="fas fa-chart-bar"></i><span>Laporan</span>
     </button>
     <button onclick="pindahTab('kas', this)" class="nav-item admin-only">
-      <i class="fas fa-cash-register"></i><span>Kas</span>
+      <i class="fas fa-wallet"></i><span>Input Kas</span>
     </button>
     <button onclick="pindahTab('jual', this)" class="nav-item active">
-      <i class="fas fa-shopping-basket"></i><span>Jual</span>
+      <i class="fas fa-plus-circle"></i><span>Input Jual</span>
     </button>
   </nav>
 
@@ -124,15 +137,12 @@
 
     window.onload = () => {
       document.querySelectorAll('input[type="date"]').forEach(i => i.valueAsDate = new Date());
-      
       if (auth === 'admin') {
         document.querySelectorAll('.admin-only').forEach(e => e.style.display = 'block');
         document.getElementById('role-display').innerText = "OWNER: " + userNama;
-        pindahTab('laporan', document.getElementById('btn-tab-laporan')); // Admin buka laporan dulu
-        muatLaporan();
+        pindahTab('laporan', document.getElementById('nav-laporan'));
       } else {
         document.getElementById('role-display').innerText = "STAFF: " + userNama;
-        // Staff langsung di tab Jual (sudah active default)
       }
     };
 
@@ -149,40 +159,36 @@
     async function simpanKas() {
       const amt = document.getElementById('k-amt').value;
       const ket = document.getElementById('k-desc').value;
-      if(!amt || !ket) return Swal.fire('Gagal', 'Isi nominal dan keterangan!', 'error');
-
-      Swal.fire({title: 'Menyimpan...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
+      if(!amt || !ket) return Swal.fire('Error', 'Nominal & Keterangan wajib diisi!', 'error');
       
+      Swal.fire({title: 'Menyimpan...', didOpen: () => Swal.showLoading()});
       const data = ["K-"+Date.now(), document.getElementById('k-tgl').value, "INTERNAL", "-", amt, ket, document.getElementById('k-jenis').value, new Date().toLocaleString()];
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert', data: data }) });
-      
-      Swal.fire('Berhasil', 'Data Kas disimpan', 'success');
+      Swal.fire('Berhasil', 'Data Kas Operasional disimpan', 'success');
       document.getElementById('k-amt').value = ''; document.getElementById('k-desc').value = '';
     }
 
     async function simpanTransaksi() {
       const wa = document.getElementById('t-wa').value, amt = document.getElementById('t-amt').value, nama = document.getElementById('t-nama').value;
-      if(!wa || !amt || !nama) return Swal.fire('Gagal', 'Lengkapi data pelanggan!', 'error');
+      if(!wa || !amt || !nama) return Swal.fire('Error', 'Lengkapi data penjualan!', 'error');
 
-      Swal.fire({title: 'Proses...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
-
+      Swal.fire({title: 'Memproses...', didOpen: () => Swal.showLoading()});
       const idTrx = "M" + Math.floor(10000 + Math.random() * 90000);
       const data = [idTrx, document.getElementById('t-tgl').value, nama, wa, amt, document.getElementById('t-desc').value, "Masuk", new Date().toLocaleString()];
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert', data: data }) });
       
       let fw = wa.startsWith('0') ? '62' + wa.substring(1) : wa;
       const link = `${GITHUB_URL}/kuitansi.html?id=${idTrx}`;
-      const msg = `*KUITANSI DIGITAL MOYA*%0A%0ATerima kasih Kak *${nama}*.%0A%0ADetail Transaksi:%0A- Total: Rp ${Number(amt).toLocaleString()}%0A- Link Kuitansi: ${link}%0A%0ASegar Langsung dari Pegunungan Turi!`;
+      const msg = `*KUITANSI MOYA DIGITAL*%0A%0AHalo Kak *${nama}*, pesanan Anda telah kami terima.%0A%0A💰 *Total: Rp ${Number(amt).toLocaleString()}*%0A📄 *Link Kuitansi:* ${link}%0A%0ATerima kasih sudah berlangganan MOYA! 🌊`;
       
-      Swal.fire('Berhasil', 'Transaksi tersimpan!', 'success').then(() => {
+      Swal.fire('Berhasil', 'Penjualan dicatat!', 'success').then(() => {
         window.open(`https://wa.me/${fw}?text=${msg}`, '_blank');
       });
     }
 
     async function muatLaporan() {
       const log = document.getElementById('log-data');
-      log.innerHTML = "<center><i class='fas fa-circle-notch fa-spin'></i> Memuat data...</center>";
-      
+      log.innerHTML = "<center><i class='fas fa-sync fa-spin' style='color:var(--primary)'></i> Memperbarui data...</center>";
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
@@ -201,8 +207,8 @@
                 <small>${r.tgl.split('T')[0]} • ${r.id}</small>
               </div>
               <div style="text-align:right">
-                <b style="color:${isM?'#2ecc71':'#e74c3c'}">${isM?'+':'-'} Rp ${n.toLocaleString()}</b>
-                <button onclick="hapusData('${r.id}')" class="btn-del"><i class="fas fa-trash"></i></button>
+                <b style="color:${isM?'#10B981':'#EF4444'}">${isM?'+':'-'} Rp ${n.toLocaleString()}</b>
+                <button onclick="hapusData('${r.id}')" class="btn-del"><i class="fas fa-trash-alt"></i></button>
               </div>
             </div>`;
           }
@@ -210,19 +216,20 @@
         document.getElementById('sum-in').innerText = "Rp " + inS.toLocaleString();
         document.getElementById('sum-out').innerText = "Rp " + outS.toLocaleString();
         document.getElementById('sum-total').innerText = "Rp " + (inS - outS).toLocaleString();
-        log.innerHTML = html || "<center>Tidak ada data periode ini.</center>";
-      } catch (e) { log.innerHTML = "Gagal memuat data."; }
+        log.innerHTML = html || "<center style='color:#94A3B8; padding:20px'>Tidak ada transaksi di tanggal ini.</center>";
+      } catch (e) { log.innerHTML = "Gagal memuat history."; }
     }
 
     async function hapusData(id) {
-      const ask = await Swal.fire({title: 'Hapus?', text: "Data ini akan hilang permanen!", icon: 'warning', showCancelButton: true});
+      const ask = await Swal.fire({title: 'Hapus Transaksi?', text: "Data di Sheet akan dihapus permanen!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#EF4444'});
       if(ask.isConfirmed) {
         Swal.fire({title: 'Menghapus...', didOpen: () => Swal.showLoading()});
         await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', id: id }) });
         muatLaporan();
-        Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
+        Swal.fire('Terhapus', 'Data sudah dibuang dari sistem.', 'success');
       }
     }
   </script>
 </body>
-</html>
+  </html>
+        
