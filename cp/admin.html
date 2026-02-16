@@ -8,50 +8,40 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root { --primary: #00B7EB; --bg: #F8FAFC; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-bottom: 90px; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-bottom: 100px; overflow-x: hidden; }
     
-    /* Header */
-    .header { background: linear-gradient(180deg, var(--primary) 0%, #0096c7 100%); color: white; padding: 30px 20px 50px; text-align: center; border-radius: 0 0 40px 40px; position: relative; }
-    .header h1 { margin: 0; font-size: 28px; letter-spacing: 2px; }
-    .header p { margin: 5px 0 0; font-size: 11px; opacity: 0.9; text-transform: uppercase; font-weight: bold; }
-    .logout-icon { position: absolute; right: 25px; top: 35px; font-size: 20px; cursor: pointer; }
+    /* Header Fixed biar cakep */
+    .header { background: linear-gradient(180deg, var(--primary) 0%, #0096c7 100%); color: white; padding: 25px 20px 45px; text-align: center; border-radius: 0 0 35px 35px; position: sticky; top: 0; z-index: 99; }
+    .header h1 { margin: 0; font-size: 26px; letter-spacing: 2px; }
+    .logout-icon { position: absolute; right: 20px; top: 25px; font-size: 20px; }
 
-    /* Layouting */
-    .page { display: none; padding: 0 20px; animation: fadeIn 0.3s ease; }
-    .page.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    /* Penting: Default Page Harus Ilang */
+    .page { display: none; padding: 0 15px; margin-top: -25px; }
+    .page.active { display: block !important; }
 
-    /* Card */
-    .card { background: white; border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: -30px; margin-bottom: 20px; }
-    .card-title { font-weight: 800; color: #333; margin-bottom: 20px; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+    /* Card Style */
+    .card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    .card-title { font-weight: 800; color: #333; margin-bottom: 15px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
 
-    /* Form */
-    label { display: block; font-size: 13px; font-weight: 700; color: #666; margin-bottom: 8px; margin-left: 5px; }
-    input, select, textarea { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #eee; margin-bottom: 20px; box-sizing: border-box; font-size: 15px; background: #F9F9F9; outline: none; }
-    input:focus { border-color: var(--primary); background: white; }
-    .btn-primary { width: 100%; padding: 18px; border-radius: 50px; border: none; background: var(--primary); color: white; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 8px 20px rgba(0,183,235,0.3); }
+    /* Form UI */
+    label { display: block; font-size: 12px; font-weight: 700; color: #888; margin: 0 0 5px 5px; }
+    input, select, textarea { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #eee; margin-bottom: 15px; box-sizing: border-box; font-size: 15px; background: #fdfdfd; }
+    .btn-primary { width: 100%; padding: 15px; border-radius: 50px; border: none; background: var(--primary); color: white; font-weight: 800; font-size: 16px; box-shadow: 0 5px 15px rgba(0,183,235,0.3); }
 
-    /* Summary Laporan */
-    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-    .sum-box { padding: 15px; border-radius: 20px; text-align: center; }
-    .box-masuk { background: #E8F5E9; color: #2E7D32; }
-    .box-keluar { background: #FFEBEE; color: #C62828; }
-    .box-total { grid-column: span 2; background: var(--primary); color: white; padding: 20px; }
-    .sum-val { font-size: 18px; font-weight: 900; display: block; margin-top: 5px; }
+    /* Summary Dashboard */
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+    .sum-box { padding: 12px; border-radius: 15px; text-align: center; }
+    .box-total { grid-column: span 2; background: var(--primary); color: white; }
 
-    /* Nav Bar */
-    .nav-bottom { position: fixed; bottom: 0; width: 100%; background: white; display: flex; padding: 12px 0; border-top: 1px solid #f0f0f0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 100; }
-    .nav-item { border: none; background: none; color: #CBD5E1; text-align: center; font-size: 11px; font-weight: 600; flex: 1; cursor: pointer; }
-    .nav-item i { font-size: 22px; display: block; margin-bottom: 5px; }
+    /* Navigation */
+    .nav-bottom { position: fixed; bottom: 0; width: 100%; background: white; display: flex; padding: 10px 0; border-top: 1px solid #f0f0f0; z-index: 1000; }
+    .nav-item { border: none; background: none; color: #ccc; text-align: center; flex: 1; cursor: pointer; transition: 0.2s; }
+    .nav-item i { font-size: 20px; display: block; margin-bottom: 3px; }
+    .nav-item span { font-size: 10px; font-weight: 600; }
     .nav-item.active { color: var(--primary); }
+    
     .admin-only { display: none; }
-
-    /* History */
-    .hist-list { margin-top: 10px; }
-    .hist-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #F1F5F9; }
-    .hist-info b { font-size: 15px; color: #1E293B; }
-    .hist-info small { color: #94A3B8; display: block; margin-top: 2px; }
-    .btn-del { color: #FDA4AF; border: none; background: none; font-size: 18px; padding: 5px 10px; }
+    .hist-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f8f8f8; font-size: 14px; }
   </style>
 </head>
 <body>
@@ -59,28 +49,28 @@
   <header class="header">
     <div class="logout-icon" onclick="logout()"><i class="fas fa-sign-out-alt"></i></div>
     <h1>MOYA</h1>
-    <p id="role-display">MEMUAT AKSES...</p>
+    <p id="role-display" style="font-size: 10px; opacity: 0.8; margin-top: 5px;">VERIFIKASI...</p>
   </header>
 
-  <section id="page-laporan" class="page admin-only">
+  <section id="page-laporan" class="page">
     <div class="card">
       <div class="card-title"><i class="fas fa-chart-line"></i> Ringkasan Saldo</div>
-      <div style="display:flex; gap:8px; margin-bottom:20px;">
+      <div style="display:flex; gap:5px; margin-bottom:15px;">
         <input type="date" id="f-start" style="margin:0">
         <input type="date" id="f-end" style="margin:0">
-        <button onclick="muatLaporan()" style="border-radius:12px; border:none; background:var(--primary); color:white; width:55px; shrink:0"><i class="fas fa-search"></i></button>
+        <button onclick="muatLaporan()" style="border:none; background:var(--primary); color:white; border-radius:10px; padding:0 15px;"><i class="fas fa-search"></i></button>
       </div>
       <div class="summary-grid">
-        <div class="sum-box box-masuk"><small>MASUK</small><span id="sum-in" class="sum-val">Rp 0</span></div>
-        <div class="sum-box box-keluar"><small>KELUAR</small><span id="sum-out" class="sum-val">Rp 0</span></div>
-        <div class="sum-box box-total"><small>TOTAL SALDO KAS</small><span id="sum-total" class="sum-val" style="font-size:24px">Rp 0</span></div>
+        <div class="sum-box" style="background:#E8F5E9; color:#2E7D32;"><small>MASUK</small><div id="sum-in" style="font-weight:900">Rp 0</div></div>
+        <div class="sum-box" style="background:#FFEBEE; color:#C62828;"><small>KELUAR</small><div id="sum-out" style="font-weight:900">Rp 0</div></div>
+        <div class="sum-box box-total"><small>TOTAL SALDO KAS</small><div id="sum-total" style="font-size:20px; font-weight:900">Rp 0</div></div>
       </div>
-      <div class="card-title" style="margin-top:20px"><i class="fas fa-history"></i> Riwayat Transaksi</div>
-      <div id="log-data" class="hist-list"></div>
+      <div class="card-title" style="margin-top:20px; border-top:1px solid #f0f0f0; padding-top:15px;"><i class="fas fa-history"></i> Riwayat</div>
+      <div id="log-data"></div>
     </div>
   </section>
 
-  <section id="page-kas" class="page admin-only">
+  <section id="page-kas" class="page">
     <div class="card">
       <div class="card-title"><i class="fas fa-cash-register"></i> Input Kas Internal</div>
       <label>Tanggal Operasional</label>
@@ -91,39 +81,39 @@
         <option value="Masuk">Pemasukan (+)</option>
       </select>
       <label>Nominal Rupiah</label>
-      <input type="number" id="k-amt" placeholder="Rp 0" inputmode="numeric">
-      <label>Keterangan / Keperluan</label>
-      <textarea id="k-desc" rows="3" placeholder="Contoh: Beli bensin, bayar listrik, dll"></textarea>
+      <input type="number" id="k-amt" placeholder="Rp 0">
+      <label>Keterangan</label>
+      <textarea id="k-desc" rows="3" placeholder="Contoh: Beli bensin..."></textarea>
       <button onclick="simpanKas()" class="btn-primary">SIMPAN DATA KAS</button>
     </div>
   </section>
 
-  <section id="page-jual" class="page active">
+  <section id="page-jual" class="page">
     <div class="card">
-      <div class="card-title"><i class="fas fa-shuttle-van"></i> Input Penjualan</div>
+      <div class="card-title"><i class="fas fa-shopping-basket"></i> Input Penjualan</div>
       <label>Tanggal Transaksi</label>
       <input type="date" id="t-tgl">
       <label>Nama Konsumen</label>
-      <input type="text" id="t-nama" placeholder="Masukkan nama pelanggan">
+      <input type="text" id="t-nama" placeholder="Nama pelanggan">
       <label>Nomor WhatsApp</label>
       <input type="tel" id="t-wa" placeholder="08xxxxxxxxxx">
       <label>Total Pembayaran</label>
-      <input type="number" id="t-amt" placeholder="Rp 0" inputmode="numeric">
-      <label>Detail Pesanan</label>
-      <textarea id="t-desc" rows="3" placeholder="Contoh: 10 Galon MOYA"></textarea>
-      <button onclick="simpanTransaksi()" class="btn-primary">SIMPAN & KIRIM KUITANSI</button>
+      <input type="number" id="t-amt" placeholder="Rp 0">
+      <label>Keterangan Pesanan</label>
+      <textarea id="t-desc" rows="3" placeholder="Contoh: 5 Galon MOYA"></textarea>
+      <button onclick="simpanTransaksi()" class="btn-primary">SIMPAN & WA KUITANSI</button>
     </div>
   </section>
 
   <nav class="nav-bottom">
     <button onclick="pindahTab('laporan', this)" class="nav-item admin-only" id="nav-laporan">
-      <i class="fas fa-chart-bar"></i><span>Laporan</span>
+      <i class="fas fa-file-invoice-dollar"></i><span>Laporan</span>
     </button>
-    <button onclick="pindahTab('kas', this)" class="nav-item admin-only">
+    <button onclick="pindahTab('kas', this)" class="nav-item admin-only" id="nav-kas">
       <i class="fas fa-wallet"></i><span>Input Kas</span>
     </button>
-    <button onclick="pindahTab('jual', this)" class="nav-item active">
-      <i class="fas fa-plus-circle"></i><span>Input Jual</span>
+    <button onclick="pindahTab('jual', this)" class="nav-item" id="nav-jual">
+      <i class="fas fa-cart-plus"></i><span>Input Jual</span>
     </button>
   </nav>
 
@@ -137,40 +127,55 @@
 
     window.onload = () => {
       document.querySelectorAll('input[type="date"]').forEach(i => i.valueAsDate = new Date());
+      
       if (auth === 'admin') {
         document.querySelectorAll('.admin-only').forEach(e => e.style.display = 'block');
         document.getElementById('role-display').innerText = "OWNER: " + userNama;
+        // Default Admin: Buka Laporan
         pindahTab('laporan', document.getElementById('nav-laporan'));
       } else {
         document.getElementById('role-display').innerText = "STAFF: " + userNama;
+        // Default Staff: Buka Jual
+        pindahTab('jual', document.getElementById('nav-jual'));
       }
     };
 
     function pindahTab(id, btn) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      // 1. Sembunyikan SEMUA page dulu (Paksa!)
+      document.querySelectorAll('.page').forEach(p => {
+          p.style.display = 'none';
+          p.classList.remove('active');
+      });
+      // 2. Matikan SEMUA nav-item aktif
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById('page-' + id).classList.add('active');
+      
+      // 3. Munculkan yang dipilih
+      const target = document.getElementById('page-' + id);
+      target.style.display = 'block';
+      target.classList.add('active');
       btn.classList.add('active');
+
       if(id === 'laporan') muatLaporan();
     }
 
     function logout() { sessionStorage.clear(); window.location.href = 'login.html'; }
 
+    // Fungsi simpanKas & simpanTransaksi tetap sama (logika API)
     async function simpanKas() {
       const amt = document.getElementById('k-amt').value;
       const ket = document.getElementById('k-desc').value;
-      if(!amt || !ket) return Swal.fire('Error', 'Nominal & Keterangan wajib diisi!', 'error');
+      if(!amt || !ket) return Swal.fire('Error', 'Lengkapi data!', 'error');
       
       Swal.fire({title: 'Menyimpan...', didOpen: () => Swal.showLoading()});
       const data = ["K-"+Date.now(), document.getElementById('k-tgl').value, "INTERNAL", "-", amt, ket, document.getElementById('k-jenis').value, new Date().toLocaleString()];
       await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert', data: data }) });
-      Swal.fire('Berhasil', 'Data Kas Operasional disimpan', 'success');
+      Swal.fire('Berhasil', 'Kas disimpan', 'success');
       document.getElementById('k-amt').value = ''; document.getElementById('k-desc').value = '';
     }
 
     async function simpanTransaksi() {
       const wa = document.getElementById('t-wa').value, amt = document.getElementById('t-amt').value, nama = document.getElementById('t-nama').value;
-      if(!wa || !amt || !nama) return Swal.fire('Error', 'Lengkapi data penjualan!', 'error');
+      if(!wa || !amt || !nama) return Swal.fire('Error', 'Lengkapi data!', 'error');
 
       Swal.fire({title: 'Memproses...', didOpen: () => Swal.showLoading()});
       const idTrx = "M" + Math.floor(10000 + Math.random() * 90000);
@@ -179,16 +184,13 @@
       
       let fw = wa.startsWith('0') ? '62' + wa.substring(1) : wa;
       const link = `${GITHUB_URL}/kuitansi.html?id=${idTrx}`;
-      const msg = `*KUITANSI MOYA DIGITAL*%0A%0AHalo Kak *${nama}*, pesanan Anda telah kami terima.%0A%0A💰 *Total: Rp ${Number(amt).toLocaleString()}*%0A📄 *Link Kuitansi:* ${link}%0A%0ATerima kasih sudah berlangganan MOYA! 🌊`;
-      
-      Swal.fire('Berhasil', 'Penjualan dicatat!', 'success').then(() => {
-        window.open(`https://wa.me/${fw}?text=${msg}`, '_blank');
-      });
+      const msg = `*KUITANSI MOYA*%0A%0ATerima kasih Kak *${nama}*.%0A💰 Total: Rp ${Number(amt).toLocaleString()}%0A📄 Link: ${link}`;
+      Swal.fire('Berhasil', 'Tersimpan!', 'success').then(() => window.open(`https://wa.me/${fw}?text=${msg}`, '_blank'));
     }
 
     async function muatLaporan() {
       const log = document.getElementById('log-data');
-      log.innerHTML = "<center><i class='fas fa-sync fa-spin' style='color:var(--primary)'></i> Memperbarui data...</center>";
+      log.innerHTML = "<small>Loading data...</small>";
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
@@ -202,13 +204,10 @@
             const n = Number(r.nominal); const isM = r.jenis === 'Masuk';
             if(isM) inS += n; else outS += n;
             html += `<div class="hist-item">
-              <div class="hist-info">
-                <b>${r.id.startsWith('K-')?r.ket:r.nama}</b>
-                <small>${r.tgl.split('T')[0]} • ${r.id}</small>
-              </div>
+              <div><b>${r.id.startsWith('K-')?r.ket:r.nama}</b><br><small style="color:#aaa">${r.tgl.split('T')[0]}</small></div>
               <div style="text-align:right">
-                <b style="color:${isM?'#10B981':'#EF4444'}">${isM?'+':'-'} Rp ${n.toLocaleString()}</b>
-                <button onclick="hapusData('${r.id}')" class="btn-del"><i class="fas fa-trash-alt"></i></button>
+                <b style="color:${isM?'#27ae60':'#e74c3c'}">${isM?'+':'-'} Rp ${n.toLocaleString()}</b>
+                <i onclick="hapusData('${r.id}')" class="fas fa-trash-alt" style="color:#ffcccb; margin-left:10px;"></i>
               </div>
             </div>`;
           }
@@ -216,20 +215,16 @@
         document.getElementById('sum-in').innerText = "Rp " + inS.toLocaleString();
         document.getElementById('sum-out').innerText = "Rp " + outS.toLocaleString();
         document.getElementById('sum-total').innerText = "Rp " + (inS - outS).toLocaleString();
-        log.innerHTML = html || "<center style='color:#94A3B8; padding:20px'>Tidak ada transaksi di tanggal ini.</center>";
-      } catch (e) { log.innerHTML = "Gagal memuat history."; }
+        log.innerHTML = html || "<center>Kosong</center>";
+      } catch (e) { log.innerHTML = "Gagal load data."; }
     }
 
     async function hapusData(id) {
-      const ask = await Swal.fire({title: 'Hapus Transaksi?', text: "Data di Sheet akan dihapus permanen!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#EF4444'});
-      if(ask.isConfirmed) {
-        Swal.fire({title: 'Menghapus...', didOpen: () => Swal.showLoading()});
+      if(confirm('Hapus data ini?')) {
         await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', id: id }) });
         muatLaporan();
-        Swal.fire('Terhapus', 'Data sudah dibuang dari sistem.', 'success');
       }
     }
   </script>
 </body>
-  </html>
-        
+</html>
