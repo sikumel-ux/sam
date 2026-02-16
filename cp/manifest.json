@@ -1,7 +1,7 @@
 {
   "name": "MOYA System",
   "short_name": "MOYA",
-  "start_url": "home.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#00B7EB",
