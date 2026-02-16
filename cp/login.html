@@ -4,26 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Login MOYA</title>
-  <link rel="stylesheet" href="gaya.css">
+  <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="login-body">
   <div class="card" style="width: 100%; max-width: 380px; text-align: center;">
-    <img src="moya.png" alt="MOYA" style="width: 180px; margin-bottom: 20px;">
+    <img src="moya.png" alt="MOYA Logo" style="width: 160px; margin-bottom: 20px;">
     
     <div style="text-align: left;">
       <span class="label">Username</span>
       <div class="input-group">
-        <i class="fas fa-user"></i>
-        <input type="text" id="user" class="input-with-icon" placeholder="Username">
+        <div class="input-icon-box"><i class="fas fa-user"></i></div>
+        <input type="text" id="user" placeholder="Username">
       </div>
 
       <span class="label">Password</span>
       <div class="input-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="pass" class="input-with-icon" placeholder="Password">
+        <div class="input-icon-box"><i class="fas fa-lock"></i></div>
+        <input type="password" id="pass" placeholder="Password">
         <i class="fas fa-eye pass-toggle" id="eyeIcon" onclick="togglePassword('pass', 'eyeIcon')"></i>
       </div>
     </div>
@@ -35,17 +35,18 @@
   <script>
     async function prosesLogin() {
       const u = document.getElementById('user').value, p = document.getElementById('pass').value;
-      if(!u || !p) return Swal.fire('Oops', 'Lengkapi data!', 'warning');
-      Swal.fire({title: 'Verifikasi...', didOpen: () => Swal.showLoading()});
-      const res = await fetch(`${API_URL}?action=login&user=${u}&pass=${p}`);
-      const d = await res.json();
-      if(d.status === 'success') {
-        sessionStorage.setItem('moya_auth', d.role);
-        sessionStorage.setItem('moya_name', d.nama);
-        window.location.href = 'admin.html';
-      } else { Swal.fire('Gagal', 'Salah user/pass!', 'error'); }
+      if(!u || !p) return Swal.fire('Oops', 'Isi username & password!', 'warning');
+      Swal.fire({title: 'Memproses...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
+      try {
+        const res = await fetch(`${API_URL}?action=login&user=${u}&pass=${p}`);
+        const d = await res.json();
+        if(d.status === 'success') {
+          sessionStorage.setItem('moya_auth', d.role);
+          sessionStorage.setItem('moya_name', d.nama);
+          window.location.href = 'admin.html';
+        } else { Swal.fire('Gagal', 'Username/Password salah!', 'error'); }
+      } catch (e) { Swal.fire('Error', 'Cek koneksi internet!', 'error'); }
     }
   </script>
 </body>
-  </html>
-  
+</html>
