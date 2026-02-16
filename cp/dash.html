@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>MOYA Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <div style="position: absolute; right: 25px; top: 25px;" onclick="logout()">
+        <i class="fas fa-power-off" style="font-size: 20px; color: #ffcccc;"></i>
+      </div>
+      <h1 class="moya-logo">MOYA</h1>
+      <p class="tagline" id="role-display">LOADING...</p>
+    </header>
+
+    <main class="content">
+      <section id="page-laporan" class="page admin-only">
+        <div class="card">
+          <h3 style="margin:0 0 15px; color:var(--text-deep)">Laporan KAS</h3>
+          <div style="display:flex; gap:8px; margin-bottom:15px;">
+            <input type="date" id="f-start"><input type="date" id="f-end">
+            <button onclick="muatLaporan()" class="btn-type active" style="flex:none; width:50px;"><i class="fas fa-search"></i></button>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+            <div style="background:#e8f5e9; padding:15px; border-radius:20px; text-align:center;"><small>MASUK</small><div id="sum-in" style="font-weight:900">0</div></div>
+            <div style="background:#ffebee; padding:15px; border-radius:20px; text-align:center;"><small>KELUAR</small><div id="sum-out" style="font-weight:900">0</div></div>
+            <div style="grid-column: span 2; background:var(--primary); color:white; padding:15px; border-radius:20px; text-align:center;"><small>SALDO TOTAL</small><div id="sum-total" style="font-size:20px; font-weight:900">0</div></div>
+          </div>
+          <div id="log-data"></div>
+        </div>
+      </section>
+
+      <section id="page-kas" class="page admin-only">
+        <div class="card">
+          <h3 style="margin:0; color:var(--text-deep)">Kas Internal</h3>
+          <span class="label">Tanggal</span><input type="date" id="k-tgl">
+          <span class="label">Jenis</span><select id="k-jenis"><option value="Keluar">Keluar (-)</option><option value="Masuk">Masuk (+)</option></select>
+          <span class="label">Nominal</span><input type="number" id="k-amt" placeholder="0">
+          <span class="label">Keterangan</span><textarea id="k-desc" rows="3"></textarea>
+          <button onclick="simpanKas()" class="btn-submit">SIMPAN KAS</button>
+        </div>
+      </section>
+
+      <section id="page-jual" class="page">
+        <div class="card">
+          <h3 style="margin:0; color:var(--text-deep)">Transaksi Jual</h3>
+          <span class="label">Tanggal</span><input type="date" id="t-tgl">
+          <span class="label">Nama</span><input type="text" id="t-nama" placeholder="Nama pelanggan">
+          <span class="label">WhatsApp</span><input type="tel" id="t-wa" placeholder="08xxx">
+          <span class="label">Nominal</span><input type="number" id="t-amt" placeholder="0">
+          <span class="label">Detail</span><textarea id="t-desc" rows="3"></textarea>
+          <button onclick="simpanTransaksi()" class="btn-submit">SIMPAN & WA</button>
+        </div>
+      </section>
+    </main>
+
+    <nav>
+      <button onclick="pindahTab('laporan', this)" class="nav-item admin-only" id="nav-laporan"><i class="fas fa-chart-line"></i><span>Laporan</span></button>
+      <button onclick="pindahTab('kas', this)" class="nav-item admin-only" id="nav-kas"><i class="fas fa-wallet"></i><span>Kas</span></button>
+      <button onclick="pindahTab('jual', this)" class="nav-item" id="nav-jual"><i class="fas fa-plus-circle"></i><span>Jual</span></button>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+  <script>window.onload = initAdmin;</script>
+</body>
+        </html>
+            
