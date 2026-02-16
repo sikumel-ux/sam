@@ -5,48 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login MOYA System</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root { --primary: #00B7EB; --deep: #006b7a; }
-    body { background: #ffffff; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-    .login-card { width: 90%; max-width: 380px; text-align: center; padding: 40px 20px; }
-    .logo-img { width: 100px; margin-bottom: 20px; }
-    h2 { color: var(--deep); font-weight: 800; margin-bottom: 30px; }
-    input { width: 100%; padding: 16px; border-radius: 15px; border: 2px solid #f0f0f0; margin-bottom: 20px; text-align: center; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
+    body { background: #ffffff; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    .login-card { width: 90%; max-width: 350px; text-align: center; }
+    input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #f5f5f5; margin-bottom: 15px; box-sizing: border-box; outline: none; font-size: 16px; }
     input:focus { border-color: var(--primary); }
-    .btn-login { width: 100%; padding: 16px; border-radius: 50px; border: none; background: linear-gradient(135deg, var(--primary), #008fa4); color: white; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(0, 183, 235, 0.2); }
-    /* Custom SweetAlert */
-    .moya-popup { border-radius: 25px !important; }
+    .btn-login { width: 100%; padding: 16px; border-radius: 50px; border: none; background: var(--primary); color: white; font-weight: 800; cursor: pointer; }
+    .btn-login:disabled { background: #ccc; }
   </style>
 </head>
 <body>
 
   <div class="login-card">
-    <img src="moya.png" alt="MOYA" class="logo-img">
-    <h2>Access Portal</h2>
-    <input type="password" id="pass" placeholder="Masukkan Kode Akses">
-    <button onclick="cekLogin()" class="btn-login">MASUK KE SISTEM</button>
+    <img src="moya.png" style="width: 80px; margin-bottom: 20px;">
+    <h2 style="color: var(--deep)">MOYA Login</h2>
+    <input type="text" id="user" placeholder="Username">
+    <input type="password" id="pass" placeholder="Password">
+    <button onclick="cekLogin()" id="btn-submit" class="btn-login">MASUK</button>
   </div>
 
   <script>
-    function notif(tipe, judul, teks) {
-      Swal.fire({
-        icon: tipe, title: judul, text: teks,
-        confirmButtonColor: '#00B7EB',
-        customClass: { popup: 'moya-popup' }
-      });
-    }
+    const API_URL = "https://script.google.com/macros/s/AKfycbx9JsUb0saYvFnH8vpCn2JZu_AzdrXXXmQIcGfMW0dsTvPndFQC_CtKyLhMx_6Kjd_IEg/exec";
 
-    function cekLogin() {
-      const p = document.getElementById('pass').value;
-      if (p === 'bosmoya') {
-        sessionStorage.setItem('moya_auth', 'admin');
-        window.location.href = 'admin.html';
-      } else if (p === 'staffmoya') {
-        sessionStorage.setItem('moya_auth', 'user');
-        window.location.href = 'admin.html';
-      } else {
-        notif('error', 'Akses Ditolak', 'Kode akses salah, Bro!');
+    async function cekLogin() {
+      const uInput = document.getElementById('user').value;
+      const pInput = document.getElementById('pass').value;
+      const btn = document.getElementById('btn-submit');
+
+      if(!uInput || !pInput) return Swal.fire('Eits!', 'Isi semua data, Bro!', 'warning');
+
+      btn.disabled = true;
+      btn.innerText = "Mengecek...";
+
+      try {
+        const res = await fetch(API_URL + "?action=getUsers");
+        const users = await res.json();
+        
+        // Cari user yang cocok
+        const found = users.find(user => user.u == uInput && user.p == pInput);
+
+        if (found) {
+          sessionStorage.setItem('moya_auth', found.r); // nyimpen role: 'admin' atau 'user'
+          Swal.fire({
+            icon: 'success', title: 'Berhasil!', text: 'Halo, ' + uInput,
+            timer: 1500, showConfirmButton: false
+          }).then(() => {
+            window.location.href = 'admin.html';
+          });
+        } else {
+          Swal.fire('Gagal', 'Username/Password salah!', 'error');
+          btn.disabled = false;
+          btn.innerText = "MASUK";
+        }
+      } catch (e) {
+        Swal.fire('Error', 'Gagal koneksi ke server.', 'error');
+        btn.disabled = false;
+        btn.innerText = "MASUK";
       }
     }
   </script>
