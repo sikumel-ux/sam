@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login MOYA System</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root { --primary: #00B7EB; --deep: #006b7a; }
+    body { background: #ffffff; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    .login-card { width: 90%; max-width: 380px; text-align: center; padding: 40px 20px; }
+    .logo-img { width: 100px; margin-bottom: 20px; }
+    h2 { color: var(--deep); font-weight: 800; margin-bottom: 30px; }
+    input { width: 100%; padding: 16px; border-radius: 15px; border: 2px solid #f0f0f0; margin-bottom: 20px; text-align: center; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
+    input:focus { border-color: var(--primary); }
+    .btn-login { width: 100%; padding: 16px; border-radius: 50px; border: none; background: linear-gradient(135deg, var(--primary), #008fa4); color: white; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(0, 183, 235, 0.2); }
+    /* Custom SweetAlert */
+    .moya-popup { border-radius: 25px !important; }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <img src="moya.png" alt="MOYA" class="logo-img">
+    <h2>Access Portal</h2>
+    <input type="password" id="pass" placeholder="Masukkan Kode Akses">
+    <button onclick="cekLogin()" class="btn-login">MASUK KE SISTEM</button>
+  </div>
+
+  <script>
+    function notif(tipe, judul, teks) {
+      Swal.fire({
+        icon: tipe, title: judul, text: teks,
+        confirmButtonColor: '#00B7EB',
+        customClass: { popup: 'moya-popup' }
+      });
+    }
+
+    function cekLogin() {
+      const p = document.getElementById('pass').value;
+      if (p === 'bosmoya') {
+        sessionStorage.setItem('moya_auth', 'admin');
+        window.location.href = 'admin.html';
+      } else if (p === 'staffmoya') {
+        sessionStorage.setItem('moya_auth', 'user');
+        window.location.href = 'admin.html';
+      } else {
+        notif('error', 'Akses Ditolak', 'Kode akses salah, Bro!');
+      }
+    }
+  </script>
+</body>
+</html>
