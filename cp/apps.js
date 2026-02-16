@@ -44,8 +44,7 @@ function pindahTab(id, btn) {
 }
 
 async function simpanKas() {
-  const amt = document.getElementById('k-amt').value;
-  const ket = document.getElementById('k-desc').value;
+  const amt = document.getElementById('k-amt').value, ket = document.getElementById('k-desc').value;
   if(!amt || !ket) return Swal.fire('Eits!', 'Isi semua!', 'warning');
   Swal.fire({title: 'Menyimpan...', didOpen: () => Swal.showLoading()});
   const data = ["K-"+Date.now(), document.getElementById('k-tgl').value, "INTERNAL", "-", amt, ket, document.getElementById('k-jenis').value, new Date().toLocaleString()];
@@ -75,8 +74,7 @@ async function muatLaporan() {
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
-    const start = new Date(document.getElementById('f-start').value);
-    const end = new Date(document.getElementById('f-end').value);
+    const start = new Date(document.getElementById('f-start').value), end = new Date(document.getElementById('f-end').value);
     let inS = 0, outS = 0, html = "";
     data.reverse().forEach(r => {
       const tgl = new Date(r.tgl);
@@ -106,4 +104,6 @@ async function hapusData(id) {
 }
 
 function logout() { sessionStorage.clear(); window.location.href = 'login.html'; }
-       
+
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+          
