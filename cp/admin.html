@@ -4,227 +4,226 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>MOYA Dashboard</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root { --primary: #00B7EB; --bg: #F8FAFC; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding-bottom: 100px; overflow-x: hidden; }
-    
-    /* Header Fixed biar cakep */
-    .header { background: linear-gradient(180deg, var(--primary) 0%, #0096c7 100%); color: white; padding: 25px 20px 45px; text-align: center; border-radius: 0 0 35px 35px; position: sticky; top: 0; z-index: 99; }
-    .header h1 { margin: 0; font-size: 26px; letter-spacing: 2px; }
-    .logout-icon { position: absolute; right: 20px; top: 25px; font-size: 20px; }
-
-    /* Penting: Default Page Harus Ilang */
-    .page { display: none; padding: 0 15px; margin-top: -25px; }
-    .page.active { display: block !important; }
-
-    /* Card Style */
-    .card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.05); margin-bottom: 20px; }
-    .card-title { font-weight: 800; color: #333; margin-bottom: 15px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
-
-    /* Form UI */
-    label { display: block; font-size: 12px; font-weight: 700; color: #888; margin: 0 0 5px 5px; }
-    input, select, textarea { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #eee; margin-bottom: 15px; box-sizing: border-box; font-size: 15px; background: #fdfdfd; }
-    .btn-primary { width: 100%; padding: 15px; border-radius: 50px; border: none; background: var(--primary); color: white; font-weight: 800; font-size: 16px; box-shadow: 0 5px 15px rgba(0,183,235,0.3); }
-
-    /* Summary Dashboard */
-    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-    .sum-box { padding: 12px; border-radius: 15px; text-align: center; }
-    .box-total { grid-column: span 2; background: var(--primary); color: white; }
-
-    /* Navigation */
-    .nav-bottom { position: fixed; bottom: 0; width: 100%; background: white; display: flex; padding: 10px 0; border-top: 1px solid #f0f0f0; z-index: 1000; }
-    .nav-item { border: none; background: none; color: #ccc; text-align: center; flex: 1; cursor: pointer; transition: 0.2s; }
-    .nav-item i { font-size: 20px; display: block; margin-bottom: 3px; }
-    .nav-item span { font-size: 10px; font-weight: 600; }
-    .nav-item.active { color: var(--primary); }
-    
-    .admin-only { display: none; }
-    .hist-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f8f8f8; font-size: 14px; }
-  </style>
 </head>
 <body>
 
+<div class="app-container">
+  
   <header class="header">
-    <div class="logout-icon" onclick="logout()"><i class="fas fa-sign-out-alt"></i></div>
-    <h1>MOYA</h1>
-    <p id="role-display" style="font-size: 10px; opacity: 0.8; margin-top: 5px;">VERIFIKASI...</p>
+    <div style="position: absolute; right: 25px; top: 25px;" onclick="logout()">
+      <i class="fas fa-sign-out-alt" style="font-size: 20px; opacity: 0.8; cursor: pointer;"></i>
+    </div>
+    <h1 class="moya-logo">MOYA</h1>
+    <p class="tagline" id="role-display">MEMUAT AKSES...</p>
   </header>
 
-  <section id="page-laporan" class="page">
-    <div class="card">
-      <div class="card-title"><i class="fas fa-chart-line"></i> Ringkasan Saldo</div>
-      <div style="display:flex; gap:5px; margin-bottom:15px;">
-        <input type="date" id="f-start" style="margin:0">
-        <input type="date" id="f-end" style="margin:0">
-        <button onclick="muatLaporan()" style="border:none; background:var(--primary); color:white; border-radius:10px; padding:0 15px;"><i class="fas fa-search"></i></button>
+  <main class="content">
+    
+    <section id="page-laporan" class="page admin-only">
+      <div class="card">
+        <h3 style="margin-top:0; color:var(--text-deep)"><i class="fas fa-chart-pie"></i> Laporan KAS</h3>
+        <div style="display:flex; gap:8px; margin-bottom:15px;">
+          <input type="date" id="f-start">
+          <input type="date" id="f-end">
+          <button onclick="muatLaporan()" style="width:60px; border-radius:15px; border:none; background:var(--primary); color:white;"><i class="fas fa-search"></i></button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+          <div style="background:#e8f5e9; padding:15px; border-radius:20px; text-align:center;">
+            <small style="color:#2e7d32; font-weight:800">MASUK</small><div id="sum-in" style="font-weight:900">0</div>
+          </div>
+          <div style="background:#ffebee; padding:15px; border-radius:20px; text-align:center;">
+            <small style="color:#c62828; font-weight:800">KELUAR</small><div id="sum-out" style="font-weight:900">0</div>
+          </div>
+          <div style="grid-column: span 2; background:var(--primary); padding:15px; border-radius:20px; text-align:center; color:white;">
+            <small style="font-weight:800">SALDO TOTAL</small><div id="sum-total" style="font-size:20px; font-weight:900">0</div>
+          </div>
+        </div>
+
+        <div id="log-data"></div>
       </div>
-      <div class="summary-grid">
-        <div class="sum-box" style="background:#E8F5E9; color:#2E7D32;"><small>MASUK</small><div id="sum-in" style="font-weight:900">Rp 0</div></div>
-        <div class="sum-box" style="background:#FFEBEE; color:#C62828;"><small>KELUAR</small><div id="sum-out" style="font-weight:900">Rp 0</div></div>
-        <div class="sum-box box-total"><small>TOTAL SALDO KAS</small><div id="sum-total" style="font-size:20px; font-weight:900">Rp 0</div></div>
+    </section>
+
+    <section id="page-kas" class="page admin-only">
+      <div class="card">
+        <h3 style="margin-top:0; color:var(--text-deep)"><i class="fas fa-wallet"></i> Kas Internal</h3>
+        
+        <span class="label">Tanggal</span>
+        <input type="date" id="k-tgl">
+        
+        <span class="label">Jenis Kas</span>
+        <select id="k-jenis">
+          <option value="Keluar">Pengeluaran (-)</option>
+          <option value="Masuk">Pemasukan (+)</option>
+        </select>
+        
+        <span class="label">Nominal (Rp)</span>
+        <input type="number" id="k-amt" placeholder="0" inputmode="numeric">
+        
+        <span class="label">Keterangan</span>
+        <textarea id="k-desc" rows="3" placeholder="Contoh: Beli bensin..."></textarea>
+        
+        <button onclick="simpanKas()" class="btn-submit">SIMPAN DATA KAS</button>
       </div>
-      <div class="card-title" style="margin-top:20px; border-top:1px solid #f0f0f0; padding-top:15px;"><i class="fas fa-history"></i> Riwayat</div>
-      <div id="log-data"></div>
-    </div>
-  </section>
+    </section>
 
-  <section id="page-kas" class="page">
-    <div class="card">
-      <div class="card-title"><i class="fas fa-cash-register"></i> Input Kas Internal</div>
-      <label>Tanggal Operasional</label>
-      <input type="date" id="k-tgl">
-      <label>Jenis Kas</label>
-      <select id="k-jenis">
-        <option value="Keluar">Pengeluaran (-)</option>
-        <option value="Masuk">Pemasukan (+)</option>
-      </select>
-      <label>Nominal Rupiah</label>
-      <input type="number" id="k-amt" placeholder="Rp 0">
-      <label>Keterangan</label>
-      <textarea id="k-desc" rows="3" placeholder="Contoh: Beli bensin..."></textarea>
-      <button onclick="simpanKas()" class="btn-primary">SIMPAN DATA KAS</button>
-    </div>
-  </section>
+    <section id="page-jual" class="page">
+      <div class="card">
+        <h3 style="margin-top:0; color:var(--text-deep)"><i class="fas fa-cart-plus"></i> Transaksi Jual</h3>
+        
+        <span class="label">Tanggal</span>
+        <input type="date" id="t-tgl">
+        
+        <span class="label">Nama Konsumen</span>
+        <input type="text" id="t-nama" placeholder="Nama pelanggan">
+        
+        <span class="label">No. WhatsApp</span>
+        <input type="tel" id="t-wa" placeholder="08xxxxxxxx">
+        
+        <span class="label">Total Bayar (Rp)</span>
+        <input type="number" id="t-amt" placeholder="0" inputmode="numeric">
+        
+        <span class="label">Detail Pesanan</span>
+        <textarea id="t-desc" rows="3" placeholder="Contoh: 5 Galon MOYA"></textarea>
+        
+        <button onclick="simpanTransaksi()" class="btn-submit">SIMPAN & KIRIM WA</button>
+      </div>
+    </section>
 
-  <section id="page-jual" class="page">
-    <div class="card">
-      <div class="card-title"><i class="fas fa-shopping-basket"></i> Input Penjualan</div>
-      <label>Tanggal Transaksi</label>
-      <input type="date" id="t-tgl">
-      <label>Nama Konsumen</label>
-      <input type="text" id="t-nama" placeholder="Nama pelanggan">
-      <label>Nomor WhatsApp</label>
-      <input type="tel" id="t-wa" placeholder="08xxxxxxxxxx">
-      <label>Total Pembayaran</label>
-      <input type="number" id="t-amt" placeholder="Rp 0">
-      <label>Keterangan Pesanan</label>
-      <textarea id="t-desc" rows="3" placeholder="Contoh: 5 Galon MOYA"></textarea>
-      <button onclick="simpanTransaksi()" class="btn-primary">SIMPAN & WA KUITANSI</button>
-    </div>
-  </section>
+  </main>
 
-  <nav class="nav-bottom">
+  <nav>
     <button onclick="pindahTab('laporan', this)" class="nav-item admin-only" id="nav-laporan">
-      <i class="fas fa-file-invoice-dollar"></i><span>Laporan</span>
+      <i class="fas fa-chart-line"></i><span>Laporan</span>
     </button>
     <button onclick="pindahTab('kas', this)" class="nav-item admin-only" id="nav-kas">
       <i class="fas fa-wallet"></i><span>Input Kas</span>
     </button>
-    <button onclick="pindahTab('jual', this)" class="nav-item" id="nav-jual">
-      <i class="fas fa-cart-plus"></i><span>Input Jual</span>
+    <button onclick="pindahTab('jual', this)" class="nav-item active" id="nav-jual">
+      <i class="fas fa-plus-circle"></i><span>Input Jual</span>
     </button>
   </nav>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzwQ47v62YYbZIcUDk7hizLGN3hiqoWajxpehpZPrRBPVVhtxPgZO42TXR1d5Lh3KAN/exec";
-    const GITHUB_URL = "https://moya.sekawan.my.id";
-    const auth = sessionStorage.getItem('moya_auth');
-    const userNama = sessionStorage.getItem('moya_name');
+</div>
 
-    if (!auth) window.location.href = 'login.html';
+<script>
+  // Konfigurasi API
+  const API_URL = "https://script.google.com/macros/s/AKfycbzwQ47v62YYbZIcUDk7hizLGN3hiqoWajxpehpZPrRBPVVhtxPgZO42TXR1d5Lh3KAN/exec";
+  const GITHUB_URL = "https://moya.sekawan.my.id";
+  
+  // Auth Check
+  const auth = sessionStorage.getItem('moya_auth');
+  const userNama = sessionStorage.getItem('moya_name');
+  if (!auth) window.location.href = 'login.html';
 
-    window.onload = () => {
-      document.querySelectorAll('input[type="date"]').forEach(i => i.valueAsDate = new Date());
-      
-      if (auth === 'admin') {
-        document.querySelectorAll('.admin-only').forEach(e => e.style.display = 'block');
-        document.getElementById('role-display').innerText = "OWNER: " + userNama;
-        // Default Admin: Buka Laporan
-        pindahTab('laporan', document.getElementById('nav-laporan'));
-      } else {
-        document.getElementById('role-display').innerText = "STAFF: " + userNama;
-        // Default Staff: Buka Jual
-        pindahTab('jual', document.getElementById('nav-jual'));
-      }
-    };
+  window.onload = () => {
+    document.querySelectorAll('input[type="date"]').forEach(i => i.valueAsDate = new Date());
+    
+    if (auth === 'admin') {
+      document.querySelectorAll('.admin-only').forEach(e => e.style.display = 'flex');
+      document.getElementById('role-display').innerText = "OWNER: " + userNama;
+      pindahTab('laporan', document.getElementById('nav-laporan'));
+    } else {
+      document.getElementById('role-display').innerText = "STAFF: " + userNama;
+      pindahTab('jual', document.getElementById('nav-jual'));
+    }
+  };
 
-    function pindahTab(id, btn) {
-      // 1. Sembunyikan SEMUA page dulu (Paksa!)
-      document.querySelectorAll('.page').forEach(p => {
-          p.style.display = 'none';
-          p.classList.remove('active');
+  // Fungsi Pindah Tab Anti-Numpuk
+  function pindahTab(id, btn) {
+    // Sembunyikan semua page
+    document.querySelectorAll('.page').forEach(p => {
+      p.style.display = 'none';
+      p.classList.remove('active');
+    });
+    // Reset semua nav-item
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    
+    // Tampilkan yang dituju
+    const target = document.getElementById('page-' + id);
+    target.style.display = 'block';
+    target.classList.add('active');
+    btn.classList.add('active');
+
+    if(id === 'laporan') muatLaporan();
+  }
+
+  function logout() { sessionStorage.clear(); window.location.href = 'login.html'; }
+
+  // --- LOGIKA SIMPAN & LOAD ---
+  async function simpanKas() {
+    const amt = document.getElementById('k-amt').value;
+    const ket = document.getElementById('k-desc').value;
+    if(!amt || !ket) return Swal.fire('Eits!', 'Nominal & keterangan harus diisi!', 'warning');
+    
+    Swal.fire({title: 'Menyimpan...', didOpen: () => Swal.showLoading()});
+    const data = ["K-"+Date.now(), document.getElementById('k-tgl').value, "INTERNAL", "-", amt, ket, document.getElementById('k-jenis').value, new Date().toLocaleString()];
+    
+    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert', data: data }) });
+    Swal.fire('Berhasil!', 'Data kas operasional masuk.', 'success');
+    document.getElementById('k-amt').value = ''; document.getElementById('k-desc').value = '';
+  }
+
+  async function simpanTransaksi() {
+    const wa = document.getElementById('t-wa').value, amt = document.getElementById('t-amt').value, nama = document.getElementById('t-nama').value;
+    if(!wa || !amt || !nama) return Swal.fire('Error', 'Data jualan belum lengkap!', 'error');
+
+    Swal.fire({title: 'Memproses...', didOpen: () => Swal.showLoading()});
+    const idTrx = "M" + Math.floor(10000 + Math.random() * 90000);
+    const data = [idTrx, document.getElementById('t-tgl').value, nama, wa, amt, document.getElementById('t-desc').value, "Masuk", new Date().toLocaleString()];
+    
+    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert', data: data }) });
+    
+    let fw = wa.startsWith('0') ? '62' + wa.substring(1) : wa;
+    const msg = `*KUITANSI MOYA DIGITAL*%0A%0AHi Kak *${nama}*, terima kasih!%0A💰 Total: Rp ${Number(amt).toLocaleString()}%0A📄 Kuitansi: ${GITHUB_URL}/kuitansi.html?id=${idTrx}`;
+    
+    Swal.fire('Berhasil!', 'Penjualan dicatat.', 'success').then(() => {
+      window.open(`https://wa.me/${fw}?text=${msg}`, '_blank');
+    });
+  }
+
+  async function muatLaporan() {
+    const log = document.getElementById('log-data');
+    log.innerHTML = "<center><i class='fas fa-sync fa-spin'></i> Memuat data...</center>";
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      const start = new Date(document.getElementById('f-start').value);
+      const end = new Date(document.getElementById('f-end').value);
+      let inS = 0, outS = 0, html = "";
+
+      data.reverse().forEach(r => {
+        const tgl = new Date(r.tgl);
+        if(tgl >= start && tgl <= end) {
+          const n = Number(r.nominal); const isM = r.jenis === 'Masuk';
+          if(isM) inS += n; else outS += n;
+          html += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #f0f0f0;">
+            <div><b>${r.id.startsWith('K-')?r.ket:r.nama}</b><br><small style="color:#aaa">${r.tgl.split('T')[0]}</small></div>
+            <div style="text-align:right">
+              <b style="color:${isM?'#2ecc71':'#e74c3c'}">${isM?'+':'-'} Rp ${n.toLocaleString()}</b>
+              <i onclick="hapusData('${r.id}')" class="fas fa-trash-alt" style="color:#ffcccb; margin-left:10px; cursor:pointer;"></i>
+            </div>
+          </div>`;
+        }
       });
-      // 2. Matikan SEMUA nav-item aktif
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      
-      // 3. Munculkan yang dipilih
-      const target = document.getElementById('page-' + id);
-      target.style.display = 'block';
-      target.classList.add('active');
-      btn.classList.add('active');
+      document.getElementById('sum-in').innerText = "Rp " + inS.toLocaleString();
+      document.getElementById('sum-out').innerText = "Rp " + outS.toLocaleString();
+      document.getElementById('sum-total').innerText = "Rp " + (inS - outS).toLocaleString();
+      log.innerHTML = html || "<center style='padding:20px; color:#ccc;'>Tidak ada data.</center>";
+    } catch (e) { log.innerHTML = "Gagal memuat history."; }
+  }
 
-      if(id === 'laporan') muatLaporan();
+  async function hapusData(id) {
+    if(confirm('Hapus data ini?')) {
+      Swal.fire({title: 'Menghapus...', didOpen: () => Swal.showLoading()});
+      await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', id: id }) });
+      muatLaporan();
+      Swal.close();
     }
-
-    function logout() { sessionStorage.clear(); window.location.href = 'login.html'; }
-
-    // Fungsi simpanKas & simpanTransaksi tetap sama (logika API)
-    async function simpanKas() {
-      const amt = document.getElementById('k-amt').value;
-      const ket = document.getElementById('k-desc').value;
-      if(!amt || !ket) return Swal.fire('Error', 'Lengkapi data!', 'error');
-      
-      Swal.fire({title: 'Menyimpan...', didOpen: () => Swal.showLoading()});
-      const data = ["K-"+Date.now(), document.getElementById('k-tgl').value, "INTERNAL", "-", amt, ket, document.getElementById('k-jenis').value, new Date().toLocaleString()];
-      await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert', data: data }) });
-      Swal.fire('Berhasil', 'Kas disimpan', 'success');
-      document.getElementById('k-amt').value = ''; document.getElementById('k-desc').value = '';
-    }
-
-    async function simpanTransaksi() {
-      const wa = document.getElementById('t-wa').value, amt = document.getElementById('t-amt').value, nama = document.getElementById('t-nama').value;
-      if(!wa || !amt || !nama) return Swal.fire('Error', 'Lengkapi data!', 'error');
-
-      Swal.fire({title: 'Memproses...', didOpen: () => Swal.showLoading()});
-      const idTrx = "M" + Math.floor(10000 + Math.random() * 90000);
-      const data = [idTrx, document.getElementById('t-tgl').value, nama, wa, amt, document.getElementById('t-desc').value, "Masuk", new Date().toLocaleString()];
-      await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert', data: data }) });
-      
-      let fw = wa.startsWith('0') ? '62' + wa.substring(1) : wa;
-      const link = `${GITHUB_URL}/kuitansi.html?id=${idTrx}`;
-      const msg = `*KUITANSI MOYA*%0A%0ATerima kasih Kak *${nama}*.%0A💰 Total: Rp ${Number(amt).toLocaleString()}%0A📄 Link: ${link}`;
-      Swal.fire('Berhasil', 'Tersimpan!', 'success').then(() => window.open(`https://wa.me/${fw}?text=${msg}`, '_blank'));
-    }
-
-    async function muatLaporan() {
-      const log = document.getElementById('log-data');
-      log.innerHTML = "<small>Loading data...</small>";
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        const start = new Date(document.getElementById('f-start').value);
-        const end = new Date(document.getElementById('f-end').value);
-        let inS = 0, outS = 0, html = "";
-
-        data.reverse().forEach(r => {
-          const tgl = new Date(r.tgl);
-          if(tgl >= start && tgl <= end) {
-            const n = Number(r.nominal); const isM = r.jenis === 'Masuk';
-            if(isM) inS += n; else outS += n;
-            html += `<div class="hist-item">
-              <div><b>${r.id.startsWith('K-')?r.ket:r.nama}</b><br><small style="color:#aaa">${r.tgl.split('T')[0]}</small></div>
-              <div style="text-align:right">
-                <b style="color:${isM?'#27ae60':'#e74c3c'}">${isM?'+':'-'} Rp ${n.toLocaleString()}</b>
-                <i onclick="hapusData('${r.id}')" class="fas fa-trash-alt" style="color:#ffcccb; margin-left:10px;"></i>
-              </div>
-            </div>`;
-          }
-        });
-        document.getElementById('sum-in').innerText = "Rp " + inS.toLocaleString();
-        document.getElementById('sum-out').innerText = "Rp " + outS.toLocaleString();
-        document.getElementById('sum-total').innerText = "Rp " + (inS - outS).toLocaleString();
-        log.innerHTML = html || "<center>Kosong</center>";
-      } catch (e) { log.innerHTML = "Gagal load data."; }
-    }
-
-    async function hapusData(id) {
-      if(confirm('Hapus data ini?')) {
-        await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', id: id }) });
-        muatLaporan();
-      }
-    }
-  </script>
+  }
+</script>
 </body>
 </html>
