@@ -2,73 +2,53 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login MOYA System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Login MOYA</title>
+  <link rel="stylesheet" href="login.css">
+  <link rel="manifest" href="manifest.json">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style>
-    :root { --primary: #00B7EB; --deep: #006b7a; }
-    body { background: #ffffff; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-    .login-card { width: 90%; max-width: 350px; text-align: center; padding: 20px; }
-    input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #f5f5f5; margin-bottom: 15px; box-sizing: border-box; outline: none; font-size: 16px; transition: 0.3s; }
-    input:focus { border-color: var(--primary); }
-    .btn-login { width: 100%; padding: 16px; border-radius: 50px; border: none; background: var(--primary); color: white; font-weight: 800; cursor: pointer; box-shadow: 0 5px 15px rgba(0,183,235,0.3); }
-    .btn-login:disabled { background: #ccc; cursor: not-allowed; }
-    .moya-popup { border-radius: 25px !important; }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="login-body">
+  <div class="card" style="width: 100%; max-width: 380px; text-align: center;">
+    <h1 class="moya-logo" style="color: var(--primary); text-shadow: none; font-size: 3rem;">MOYA</h1>
+    <p style="margin-bottom: 30px; font-weight: 600; color: #666;">PWA DASHBOARD v2.0</p>
 
-  <div class="login-card">
-    <img src="moya.png" alt="MOYA" style="width: 80px; margin-bottom: 20px;">
-    <h2 style="color: var(--deep); margin-bottom: 30px;">Akses MOYA System</h2>
-    <input type="text" id="user" placeholder="Username">
-    <input type="password" id="pass" placeholder="Password">
-    <button onclick="cekLogin()" id="btn-submit" class="btn-login">MASUK</button>
+    <div style="text-align: left;">
+      <span class="label">Username</span>
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="user" class="input-with-icon" placeholder="Username">
+      </div>
+
+      <span class="label">Password</span>
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="pass" class="input-with-icon" placeholder="Password">
+        <i class="fas fa-eye pass-toggle" onclick="togglePassword()"></i>
+      </div>
+    </div>
+
+    <button onclick="prosesLogin()" class="btn-submit">MASUK SEKARANG</button>
   </div>
 
+  <script src="app.js"></script>
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzwQ47v62YYbZIcUDk7hizLGN3hiqoWajxpehpZPrRBPVVhtxPgZO42TXR1d5Lh3KAN/exec";
-
-    async function cekLogin() {
-      const uInput = document.getElementById('user').value;
-      const pInput = document.getElementById('pass').value;
-      const btn = document.getElementById('btn-submit');
-
-      if(!uInput || !pInput) {
-        return Swal.fire({ icon: 'warning', title: 'Eits!', text: 'Isi Username & Password dulu, Bro!', customClass: {popup: 'moya-popup'} });
-      }
-
-      btn.disabled = true;
-      btn.innerText = "Mengecek Akses...";
-
-      try {
-        // Manggil Apps Script dengan parameter action=getUsers
-        const res = await fetch(API_URL + "?action=getUsers");
-        const users = await res.json();
-        
-        // Cari user di data yang ditarik dari sheet USERS
-        const found = users.find(u => u.u == uInput && u.p == pInput);
-
-        if (found) {
-          sessionStorage.setItem('moya_auth', found.r); // Simpan role: admin/user
-          sessionStorage.setItem('moya_name', found.u); // Simpan nama buat sapaan
-          
-          Swal.fire({
-            icon: 'success', title: 'Berhasil!', text: 'Halo ' + found.u + ', Gaskeun!',
-            timer: 1500, showConfirmButton: false, customClass: {popup: 'moya-popup'}
-          }).then(() => {
-            window.location.href = 'admin.html';
-          });
-        } else {
-          Swal.fire({ icon: 'error', title: 'Gagal', text: 'Username/Password salah!', customClass: {popup: 'moya-popup'} });
-          btn.disabled = false;
-          btn.innerText = "MASUK";
-        }
-      } catch (e) {
-        Swal.fire({ icon: 'error', title: 'Error', text: 'Gagal konek ke Sheet. Cek internet atau Deployment!', customClass: {popup: 'moya-popup'} });
-        btn.disabled = false;
-        btn.innerText = "MASUK";
-      }
+    function togglePassword() {
+      const p = document.getElementById('pass');
+      p.type = p.type === "password" ? "text" : "password";
+    }
+    async function prosesLogin() {
+      const u = document.getElementById('user').value, p = document.getElementById('pass').value;
+      if(!u || !p) return Swal.fire('Oops', 'Isi semua!', 'warning');
+      Swal.fire({title: 'Verifikasi...', didOpen: () => Swal.showLoading()});
+      const res = await fetch(`${API_URL}?action=login&user=${u}&pass=${p}`);
+      const d = await res.json();
+      if(d.status === 'success') {
+        sessionStorage.setItem('moya_auth', d.role);
+        sessionStorage.setItem('moya_name', d.nama);
+        window.location.href = 'admin.html';
+      } else { Swal.fire('Gagal', 'User/Pass Salah!', 'error'); }
     }
   </script>
 </body>
