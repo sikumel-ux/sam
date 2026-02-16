@@ -1,0 +1,43 @@
+/* --- LOGIN PAGE STYLES --- */
+.login-body {
+  background: linear-gradient(135deg, var(--primary), var(--grad-end));
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.input-group i {
+  position: absolute;
+  left: 15px;
+  top: 18px;
+  color: var(--primary);
+  font-size: 18px;
+}
+
+.input-with-icon {
+  padding-left: 50px !important;
+}
+
+.pass-toggle {
+  position: absolute;
+  right: 15px;
+  top: 18px;
+  color: #ccc;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* History Item Styling */
+.hist-item {
+  display: flex; 
+  justify-content: space-between; 
+  padding: 15px 0; 
+  border-bottom: 1px solid #f0f0f0;
+}
