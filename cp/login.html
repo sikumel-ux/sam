@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Login MOYA</title>
-  <link rel="stylesheet" href="gaya.css">
-  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="login-body">
-  <div class="card" style="width: 100%; max-width: 380px; text-align: center;">
-    <img src="moya.png" alt="MOYA Logo" style="width: 160px; margin-bottom: 20px;">
+
+  <div class="card">
+    <img src="moya.png" alt="MOYA" style="width: 160px; margin-bottom: 20px;">
     
     <div style="text-align: left;">
       <span class="label">Username</span>
@@ -24,28 +24,54 @@
       <div class="input-group">
         <div class="input-icon-box"><i class="fas fa-lock"></i></div>
         <input type="password" id="pass" placeholder="Password">
-        <i class="fas fa-eye pass-toggle" id="eyeIcon" onclick="togglePassword('pass', 'eyeIcon')"></i>
+        <i class="fas fa-eye pass-toggle" id="eyeIcon" onclick="eyeToggle()"></i>
       </div>
     </div>
 
     <button onclick="prosesLogin()" class="btn-submit">MASUK</button>
   </div>
 
-  <script src="app.js"></script>
   <script>
+    // Link API lo
+    const API_URL = "https://script.google.com/macros/s/AKfycbzwQ47v62YYbZIcUDk7hizLGN3hiqoWajxpehpZPrRBPVVhtxPgZO42TXR1d5Lh3KAN/exec";
+
+    // FUNGSI MATA (PASTI JALAN)
+    function eyeToggle() {
+      const p = document.getElementById('pass');
+      const icon = document.getElementById('eyeIcon');
+      if (p.type === "password") {
+        p.type = "text";
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        p.type = "password";
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+
+    // FUNGSI LOGIN
     async function prosesLogin() {
-      const u = document.getElementById('user').value, p = document.getElementById('pass').value;
-      if(!u || !p) return Swal.fire('Oops', 'Isi username & password!', 'warning');
+      const u = document.getElementById('user').value;
+      const p = document.getElementById('pass').value;
+      
+      if(!u || !p) return Swal.fire('Oops', 'Isi data lengkap!', 'warning');
+      
       Swal.fire({title: 'Memproses...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
+      
       try {
-        const res = await fetch(`${API_URL}?action=login&user=${u}&pass=${p}`);
-        const d = await res.json();
+        const response = await fetch(`${API_URL}?action=login&user=${u}&pass=${p}`);
+        const d = await response.json();
+        
         if(d.status === 'success') {
           sessionStorage.setItem('moya_auth', d.role);
           sessionStorage.setItem('moya_name', d.nama);
           window.location.href = 'admin.html';
-        } else { Swal.fire('Gagal', 'Username/Password salah!', 'error'); }
-      } catch (e) { Swal.fire('Error', 'Cek koneksi internet!', 'error'); }
+        } else { 
+          Swal.fire('Gagal', 'Username/Password salah!', 'error'); 
+        }
+      } catch (err) {
+        console.error(err);
+        Swal.fire('Error', 'Gagal konek ke Server Google Sheets!', 'error');
+      }
     }
   </script>
 </body>
