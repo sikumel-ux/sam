@@ -1,69 +1,49 @@
 :root {
   --primary: #00B7EB;
   --grad-end: #008fa4;
-  --light-bg: #bff7ff;
   --text-deep: #006b7a;
   --white: #ffffff;
   --input-bg: #f8fdff;
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
+body { margin: 0; background-color: #f0f9ff; }
 
-body { 
-  background-color: #f0f9ff; 
-  margin: 0; 
-  font-family: 'Inter', sans-serif; 
-}
-
-/* Halaman Login */
 .login-body {
   background: linear-gradient(135deg, var(--primary), var(--grad-end));
   height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
 }
 
-.app-container { width: 100%; max-width: 480px; min-height: 100vh; background: #fdfdfd; margin: auto; position: relative; }
-
-/* Header Admin */
-.header {
-  background: linear-gradient(135deg, var(--primary), var(--grad-end));
-  height: 230px; border-bottom-left-radius: 60px; border-bottom-right-radius: 60px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  position: relative; color: white;
-}
-
-.content { padding: 0 20px; margin-top: -65px; padding-bottom: 120px; }
-
-/* Card Style */
 .card { 
   background: var(--white); 
-  padding: 30px 25px; 
+  padding: 30px 20px; 
   border-radius: 35px; 
   box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-  margin-bottom: 20px; 
+  width: 100%; max-width: 380px; text-align: center;
 }
 
 .label { 
   font-size: 11px; font-weight: 800; color: var(--text-deep); 
   display: block; margin: 15px 0 6px 10px; text-transform: uppercase; 
+  text-align: left;
 }
 
-/* INPUT GROUP STYLE (SESUAI MOCKUP) */
 .input-group { 
   position: relative; 
   display: flex; 
-  align-items: center; 
+  align-items: stretch;
   background: var(--input-bg); 
   border-radius: 15px; 
   border: 2px solid #eefaff; 
   overflow: hidden; 
-  margin-bottom: 5px;
+  height: 55px;
+  margin-bottom: 10px;
 }
 
 .input-icon-box {
   background: var(--primary);
   color: white;
   width: 50px;
-  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,35 +55,28 @@ body {
   flex: 1;
   border: none !important;
   background: transparent !important;
-  padding: 15px !important;
+  padding: 0 45px 0 15px !important;
   font-size: 16px;
   outline: none;
   color: #333;
 }
 
-/* Tombol Mata (Hide/Show) */
 .pass-toggle {
   position: absolute;
   right: 15px;
-  color: #ccc;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #bbb;
   cursor: pointer;
-  z-index: 10;
+  z-index: 20;
   font-size: 18px;
-  padding: 5px;
+  padding: 10px;
 }
 
-/* Tombol Submit */
 .btn-submit {
   width: 100%; padding: 18px; border-radius: 25px; border: none;
   background: linear-gradient(to right, var(--primary), var(--grad-end));
-  color: white; font-weight: 800; margin-top: 25px; cursor: pointer;
+  color: white; font-weight: 800; margin-top: 20px; cursor: pointer;
   box-shadow: 0 8px 15px rgba(0, 183, 235, 0.3);
   text-transform: uppercase;
 }
-
-/* Navigasi */
-nav { position: fixed; bottom: 0; width: 100%; max-width: 480px; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 15px 0 25px; border-top: 1px solid #f0faff; }
-.nav-item { background: none; border: none; color: #cbd5e1; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; cursor: pointer; }
-.nav-item.active { color: var(--primary); }
-.nav-item i { font-size: 24px; }
-                              
