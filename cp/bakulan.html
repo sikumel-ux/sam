@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard MOYA</title>
+    <link rel="stylesheet" href="gaya.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <header class="admin-header">
+        <div class="user-info">
+            <i class="fas fa-circle-user fa-2xl"></i>
+            <div>
+                <span id="display-name">Memuat...</span><br>
+                <small>MOYA Dashboard</small>
+            </div>
+        </div>
+        <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i></button>
+    </header>
+
+    <div class="container">
+        <div class="balance-card">
+            <p>Saldo Kas Saat Ini</p>
+            <h1 id="sum-total">Rp 0</h1>
+            <div class="balance-detail">
+                <div class="in">
+                    <small>Masuk</small><br>
+                    <b id="sum-in">Rp 0</b>
+                </div>
+                <div class="out">
+                    <small>Keluar</small><br>
+                    <b id="sum-out">Rp 0</b>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-menu">
+            <button onclick="bukaModal('JUAL')" class="btn-action btn-jual">
+                <i class="fas fa-bottle-water"></i><br>Input Jual
+            </button>
+            <button onclick="bukaModal('KAS')" class="btn-action btn-kas role-boss">
+                <i class="fas fa-exchange-alt"></i><br>Input Kas
+            </button>
+        </div>
+
+        <div class="history-section">
+            <div class="filter-box">
+                <input type="date" id="f-start" onchange="muatLaporan()">
+                <span>s/d</span>
+                <input type="date" id="f-end" onchange="muatLaporan()">
+            </div>
+            
+            <h3>Laporan Kas</h3>
+            <div id="log-data" class="log-list">
+                </div>
+        </div>
+    </div>
+
+    <div id="modalInput" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Input Transaksi</h3>
+                <span onclick="tutupModal()" class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="in-jenis"> <label>Tanggal</label>
+                <input type="date" id="in-tgl">
+
+                <div id="field-pelanggan">
+                    <label>Nama Pelanggan (Opsional)</label>
+                    <input type="text" id="in-nama" placeholder="Contoh: Pak Budi">
+                    <label>Nomor WA</label>
+                    <input type="number" id="in-wa" placeholder="6281xxx">
+                </div>
+
+                <label>Nominal (Rp)</label>
+                <input type="number" id="in-amt" placeholder="0">
+
+                <label>Keterangan</label>
+                <textarea id="in-ket" placeholder="Guna pembayaran..."></textarea>
+                
+                <button onclick="simpanData()" class="btn-submit">SIMPAN DATA</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+
+    <script>
+        // Logika Tampilan Modal Lokal
+        function bukaModal(tipe) {
+            const modal = document.getElementById('modalInput');
+            const title = document.getElementById('modalTitle');
+            const fieldP = document.getElementById('field-pelanggan');
+            const inJenis = document.getElementById('in-jenis');
+            
+            // Set Tanggal Hari Ini
+            document.getElementById('in-tgl').value = new Date().toISOString().split('T')[0];
+            
+            if (tipe === 'JUAL') {
+                title.innerText = "Input Penjualan Galon";
+                fieldP.style.display = "block";
+                inJenis.value = "Masuk";
+                document.getElementById('in-ket').value = "Penjualan Galon MOYA";
+            } else {
+                title.innerText = "Input Kas Masuk/Keluar";
+                fieldP.style.display = "none";
+                // Untuk kas, user milih sendiri jenisnya (Nanti bisa ditambahin select)
+                inJenis.value = "Masuk"; 
+                document.getElementById('in-ket').value = "";
+            }
+            modal.style.display = "block";
+        }
+
+        function tutupModal() {
+            document.getElementById('modalInput').style.display = "none";
+            // Reset form
+            document.getElementById('in-nama').value = "";
+            document.getElementById('in-wa').value = "";
+            document.getElementById('in-amt').value = "";
+            document.getElementById('in-ket').value = "";
+        }
+    </script>
+</body>
+  </html>
+                                                                               
