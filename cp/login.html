@@ -17,7 +17,7 @@
       <span class="label">Username</span>
       <div class="input-group">
         <div class="input-icon-box"><i class="fas fa-user"></i></div>
-        <input type="text" id="user" placeholder="Username">
+        <input type="text" id="user" placeholder="Username" autocomplete="off">
       </div>
 
       <span class="label">Password</span>
@@ -32,10 +32,10 @@
   </div>
 
   <script>
-    // Link API lo
-    const API_URL = "https://script.google.com/macros/s/AKfycbzwQ47v62YYbZIcUDk7hizLGN3hiqoWajxpehpZPrRBPVVhtxPgZO42TXR1d5Lh3KAN/exec";
+    // Link API Google Apps Script lo yang baru
+    const API_URL = "https://script.google.com/macros/s/AKfycbx9JsUb0saYvFnH8vpCn2JZu_AzdrXXXmQIcGfMW0dsTvPndFQC_CtKyLhMx_6Kjd_IEg/exec";
 
-    // FUNGSI MATA (PASTI JALAN)
+    // FUNGSI MATA (Hide/Show Password)
     function eyeToggle() {
       const p = document.getElementById('pass');
       const icon = document.getElementById('eyeIcon');
@@ -48,29 +48,37 @@
       }
     }
 
-    // FUNGSI LOGIN
+    // FUNGSI LOGIN DISESUAIKAN DENGAN SHEET USERS (Username, Password, Role)
     async function prosesLogin() {
-      const u = document.getElementById('user').value;
-      const p = document.getElementById('pass').value;
+      const u = document.getElementById('user').value.trim();
+      const p = document.getElementById('pass').value.trim();
       
-      if(!u || !p) return Swal.fire('Oops', 'Isi data lengkap!', 'warning');
+      if(!u || !p) return Swal.fire('Oops', 'Lengkapi username dan password!', 'warning');
       
-      Swal.fire({title: 'Memproses...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
+      Swal.fire({
+        title: 'Verifikasi...', 
+        allowOutsideClick: false, 
+        didOpen: () => Swal.showLoading()
+      });
       
       try {
-        const response = await fetch(`${API_URL}?action=login&user=${u}&pass=${p}`);
+        // Encode URL untuk mengamankan karakter khusus
+        const response = await fetch(`${API_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
         const d = await response.json();
         
         if(d.status === 'success') {
+          // Simpan role dari kolom ke-3 Sheet
           sessionStorage.setItem('moya_auth', d.role);
-          sessionStorage.setItem('moya_name', d.nama);
+          // Karena kolom NAMA tidak ada, kita gunakan USERNAME sebagai nama tampilan
+          sessionStorage.setItem('moya_name', u); 
+          
           window.location.href = 'admin.html';
         } else { 
-          Swal.fire('Gagal', 'Username/Password salah!', 'error'); 
+          Swal.fire('Gagal', 'Username atau Password salah!', 'error'); 
         }
       } catch (err) {
         console.error(err);
-        Swal.fire('Error', 'Gagal konek ke Server Google Sheets!', 'error');
+        Swal.fire('Error', 'Gagal konek ke Server! Cek link API atau koneksi internet.', 'error');
       }
     }
   </script>
