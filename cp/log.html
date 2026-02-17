@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Login MOYA</title>
+  <link rel="stylesheet" href="gaya.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-body">
+  <div class="card">
+    <img src="moya.png" alt="MOYA" style="width: 160px; margin-bottom: 20px;">
+    <div style="text-align: left;">
+      <span class="label">Username</span>
+      <div class="input-group">
+        <div class="input-icon-box"><i class="fas fa-user"></i></div>
+        <input type="text" id="user" placeholder="Username">
+      </div>
+      <span class="label">Password</span>
+      <div class="input-group">
+        <div class="input-icon-box"><i class="fas fa-lock"></i></div>
+        <input type="password" id="pass" placeholder="Password">
+        <i class="fas fa-eye pass-toggle" id="eyeIcon" onclick="eyeToggle()"></i>
+      </div>
+    </div>
+    <button onclick="prosesLogin()" class="btn-submit">MASUK</button>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzwQ47v62YYbZIcUDk7hizLGN3hiqoWajxpehpZPrRBPVVhtxPgZO42TXR1d5Lh3KAN/exec";
+
+    function eyeToggle() {
+      const p = document.getElementById('pass');
+      const icon = document.getElementById('eyeIcon');
+      p.type = p.type === "password" ? "text" : "password";
+      icon.classList.toggle('fa-eye');
+      icon.classList.toggle('fa-eye-slash');
+    }
+
+    async function prosesLogin() {
+      const u = document.getElementById('user').value.trim();
+      const p = document.getElementById('pass').value.trim();
+      if(!u || !p) return Swal.fire('Oops', 'Isi semua bidang!', 'warning');
+      
+      Swal.fire({title: 'Memproses...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
+      
+      try {
+        const response = await fetch(`${API_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
+        const d = await response.json();
+        if(d.status === 'success') {
+          sessionStorage.setItem('moya_auth', d.role);
+          sessionStorage.setItem('moya_name', u);
+          window.location.href = 'admin.html';
+        } else {
+          Swal.fire('Gagal', 'User atau Password salah!', 'error');
+        }
+      } catch (err) {
+        Swal.fire('Error', 'Gagal koneksi ke API!', 'error');
+      }
+    }
+  </script>
+</body>
+</html>
