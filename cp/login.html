@@ -32,10 +32,10 @@
   </div>
 
   <script>
-    // Link API Google Apps Script lo yang baru
+    // LINK API YANG LO MINTA
     const API_URL = "https://script.google.com/macros/s/AKfycbzwQ47v62YYbZIcUDk7hizLGN3hiqoWajxpehpZPrRBPVVhtxPgZO42TXR1d5Lh3KAN/exec";
 
-    // FUNGSI MATA (Hide/Show Password)
+    // FUNGSI MATA (Hide/Show)
     function eyeToggle() {
       const p = document.getElementById('pass');
       const icon = document.getElementById('eyeIcon');
@@ -48,29 +48,25 @@
       }
     }
 
-    // FUNGSI LOGIN DISESUAIKAN DENGAN SHEET USERS (Username, Password, Role)
+    // FUNGSI LOGIN
     async function prosesLogin() {
       const u = document.getElementById('user').value.trim();
       const p = document.getElementById('pass').value.trim();
       
-      if(!u || !p) return Swal.fire('Oops', 'Lengkapi username dan password!', 'warning');
+      if(!u || !p) return Swal.fire('Oops', 'Isi data lengkap!', 'warning');
       
-      Swal.fire({
-        title: 'Verifikasi...', 
-        allowOutsideClick: false, 
-        didOpen: () => Swal.showLoading()
-      });
+      Swal.fire({title: 'Memproses...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
       
       try {
-        // Encode URL untuk mengamankan karakter khusus
+        // Panggil API dengan parameter action, user, dan pass
         const response = await fetch(`${API_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
         const d = await response.json();
         
         if(d.status === 'success') {
-          // Simpan role dari kolom ke-3 Sheet
+          // Simpan role (kolom ke-3 di USERS)
           sessionStorage.setItem('moya_auth', d.role);
-          // Karena kolom NAMA tidak ada, kita gunakan USERNAME sebagai nama tampilan
-          sessionStorage.setItem('moya_name', u); 
+          // Pakai username sebagai nama tampilan (karena kolom nama ga ada)
+          sessionStorage.setItem('moya_name', u);
           
           window.location.href = 'admin.html';
         } else { 
@@ -78,7 +74,7 @@
         }
       } catch (err) {
         console.error(err);
-        Swal.fire('Error', 'Gagal konek ke Server! Cek link API atau koneksi internet.', 'error');
+        Swal.fire('Error', 'Gagal konek ke Server! Pastikan link API benar.', 'error');
       }
     }
   </script>
