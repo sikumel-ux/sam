@@ -124,10 +124,19 @@
         /* --- Partner Slider (Running Logo) --- */
         .partner-container { padding: 10px 0 100px; }
         .partner-logo {
-            display: flex; justify-content: center; align-items: center;
-            filter: grayscale(100%); opacity: 0.5;
-        }
-        .partner-logo img { max-width: 90px; max-height: 45px; object-fit: contain; }
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    opacity: 0.9; /* <--- Pakai ini biar logo merah Agra Mas-nya mantap kelihatan */
+    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.05)); /* Opsional: tambah bayangan halus biar logo lebih "timbul" */
+}
+
+.partner-logo img { 
+    max-width: 110px; 
+    max-height: 45px; 
+    object-fit: contain; 
+}
+
 
         /* --- Bottom Nav --- */
         .bottom-nav {
