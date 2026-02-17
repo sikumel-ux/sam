@@ -1,43 +1,82 @@
-/* --- LOGIN PAGE STYLES --- */
+:root {
+  --primary: #00B7EB;
+  --grad-end: #008fa4;
+  --text-deep: #006b7a;
+  --white: #ffffff;
+  --input-bg: #f8fdff;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
+body { margin: 0; background-color: #00B7EB; } /* Warna bg luar biru sesuai mockup */
+
 .login-body {
-  background: linear-gradient(135deg, var(--primary), var(--grad-end));
-  height: 100vh;
-  display: flex;
+  height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+
+.card { 
+  background: var(--white); 
+  padding: 40px 25px; 
+  border-radius: 40px; 
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2); 
+  width: 100%; max-width: 380px; text-align: center;
+}
+
+.label { 
+  font-size: 11px; font-weight: 800; color: #006b7a; 
+  display: block; margin: 20px 0 8px 5px; text-transform: uppercase; 
+  text-align: left; letter-spacing: 0.5px;
+}
+
+/* CONTAINER INPUT */
+.input-group { 
+  position: relative; 
+  display: flex; 
   align-items: center;
-  justify-content: center;
-  padding: 20px;
+  background: #f0faff; 
+  border-radius: 20px; 
+  height: 60px; /* Tinggi input sesuai mockup */
+  overflow: hidden;
+  border: 1px solid #e0f2f7;
 }
 
-.input-group {
-  position: relative;
-  margin-bottom: 5px;
-}
-
-.input-group i {
-  position: absolute;
-  left: 15px;
-  top: 18px;
+/* Icon Kiri (User/Lock) */
+.input-group i:first-child {
+  width: 55px;
+  font-size: 20px;
   color: var(--primary);
-  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-.input-with-icon {
-  padding-left: 50px !important;
+.input-group input {
+  flex: 1;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 50px 0 0 !important; /* Ruang buat icon mata di kanan */
+  font-size: 16px;
+  outline: none;
+  color: #333;
+  height: 100%;
 }
 
+/* ICON MATA (Hanya muncul di password) */
 .pass-toggle {
   position: absolute;
   right: 15px;
-  top: 18px;
-  color: #ccc;
+  color: #000; /* Warna hitam sesuai mockup screenshot 2 */
   cursor: pointer;
   z-index: 10;
+  font-size: 18px;
+  padding: 10px;
 }
 
-/* History Item Styling */
-.hist-item {
-  display: flex; 
-  justify-content: space-between; 
-  padding: 15px 0; 
-  border-bottom: 1px solid #f0f0f0;
+.btn-submit {
+  width: 100%; padding: 18px; border-radius: 30px; border: none;
+  background: #00B7EB;
+  color: white; font-weight: 800; margin-top: 30px; cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0, 183, 235, 0.2);
+  font-size: 16px;
+  letter-spacing: 1px;
 }
