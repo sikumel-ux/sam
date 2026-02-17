@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOYA Travel - Ticketing App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00695c;
+            --secondary: #00bfa5;
+            --bg: #f4f7f8;
+            --white: #ffffff;
+            --text: #2d3436;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            min-height: 100vh;
+            background: var(--bg);
+            padding-bottom: 80px;
+        }
+
+        /* --- Header --- */
+        .header {
+            padding: 30px 20px;
+            background: var(--white);
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .header h1 { margin: 0; font-size: 24px; color: var(--primary); }
+        .header p { margin: 5px 0 0; font-size: 14px; color: #888; }
+
+        /* --- Tab Navigation --- */
+        .tab-menu {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            gap: 10px;
+        }
+
+        .tab-item {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: white;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .tab-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 15px rgba(0, 105, 92, 0.2);
+        }
+
+        .tab-item i { display: block; font-size: 18px; margin-bottom: 5px; }
+
+        /* --- Search Box --- */
+        .search-section { padding: 0 20px 20px; }
+        .search-bar {
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+        .search-bar input {
+            border: none; outline: none; width: 100%; margin-left: 10px; font-size: 14px;
+        }
+
+        /* --- Ticket List --- */
+        .ticket-list { padding: 0 20px; }
+        .ticket-card {
+            background: white;
+            border-radius: 25px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 8px solid var(--secondary);
+            position: relative;
+        }
+
+        .ticket-type {
+            font-size: 10px;
+            font-weight: 900;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .route {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .city h4 { margin: 0; font-size: 18px; }
+        .city small { color: #aaa; }
+
+        .price-tag {
+            background: #e0f2f1;
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .btn-booking {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            height: 70px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header class="header">
+        <h1>MOYA TRAVEL</h1>
+        <p>Solusi Tiket Bus, Kapal & Pesawat</p>
+    </header>
+
+    <div class="tab-menu">
+        <div class="tab-item active" onclick="filterData('all', this)"><i class="fas fa-th-large"></i>Semua</div>
+        <div class="tab-item" onclick="filterData('bus', this)"><i class="fas fa-bus"></i>Bus</div>
+        <div class="tab-item" onclick="filterData('kapal', this)"><i class="fas fa-ship"></i>Kapal</div>
+        <div class="tab-item" onclick="filterData('pesawat', this)"><i class="fas fa-plane"></i>Pesawat</div>
+    </div>
+
+    <div class="search-section">
+        <div class="search-bar">
+            <i class="fas fa-search" style="color:#ccc"></i>
+            <input type="text" id="searchInput" onkeyup="searchTicket()" placeholder="Cari kota tujuan...">
+        </div>
+    </div>
+
+    <div class="ticket-list" id="ticketContainer">
+        </div>
+
+    <nav class="bottom-nav">
+        <i class="fas fa-home" style="color:var(--primary)"></i>
+        <i class="fas fa-ticket-alt" style="color:#ccc"></i>
+        <i class="fas fa-history" style="color:#ccc"></i>
+        <i class="fas fa-user-circle" style="color:#ccc"></i>
+    </nav>
+</div>
+
+<script>
+    // DATA DUMMY (Hardcoded)
+    const tickets = [
+        { id: 1, type: 'bus', operator: 'PO. Haryanto', rute: 'Jakarta - Surabaya', jam: '19:00', harga: 350000, kelas: 'Executive' },
+        { id: 2, type: 'pesawat', operator: 'Garuda Indonesia', rute: 'Jakarta - Bali', jam: '08:30', harga: 1200000, kelas: 'Ekonomi' },
+        { id: 3, type: 'kapal', operator: 'PT. PELNI', rute: 'Surabaya - Makassar', jam: '10:00', harga: 450000, kelas: 'Kelas 1' },
+        { id: 4, type: 'bus', operator: 'Rosalia Indah', rute: 'Solo - Jakarta', jam: '20:00', harga: 280000, kelas: 'Super Top' },
+        { id: 5, type: 'pesawat', operator: 'Lion Air', rute: 'Jakarta - Medan', jam: '13:45', harga: 850000, kelas: 'Ekonomi' },
+        { id: 6, type: 'kapal', operator: 'Dharma Lautan', rute: 'Semarang - Pontianak', jam: '22:00', harga: 550000, kelas: 'VIP' }
+    ];
+
+    function renderTickets(data) {
+        const container = document.getElementById('ticketContainer');
+        container.innerHTML = '';
+        
+        data.forEach(t => {
+            const icon = t.type === 'bus' ? 'fa-bus' : t.type === 'kapal' ? 'fa-ship' : 'fa-plane';
+            container.innerHTML += `
+                <div class="ticket-card" data-type="${t.type}" data-rute="${t.rute.toLowerCase()}">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span class="ticket-type"><i class="fas ${icon}"></i> ${t.type}</span>
+                        <span class="price-tag">Rp ${t.harga.toLocaleString('id-ID')}</span>
+                    </div>
+                    <div class="route">
+                        <div class="city">
+                            <h4>${t.rute}</h4>
+                            <small>${t.operator} • ${t.kelas}</small>
+                        </div>
+                        <div style="text-align:right">
+                            <b style="font-size:18px">${t.jam}</b><br>
+                            <small style="color:#aaa">WIB</small>
+                        </div>
+                    </div>
+                    <button class="btn-booking" onclick="orderWA('${t.operator}', '${t.rute}')">HUBUNGI ADMIN</button>
+                </div>
+            `;
+        });
+    }
+
+    function filterData(type, btn) {
+        // Tab styling
+        document.querySelectorAll('.tab-item').forEach(i => i.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Logic filter
+        if(type === 'all') {
+            renderTickets(tickets);
+        } else {
+            const filtered = tickets.filter(t => t.type === type);
+            renderTickets(filtered);
+        }
+    }
+
+    function searchTicket() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const cards = document.getElementsByClassName('ticket-card');
+        
+        for (let i = 0; i < cards.length; i++) {
+            const rute = cards[i].getAttribute('data-rute');
+            cards[i].style.display = rute.includes(input) ? "block" : "none";
+        }
+    }
+
+    function orderWA(op, rute) {
+        const msg = `Halo Admin MOYA Travel, saya mau tanya tiket ${op} rute ${rute}. Apakah masih ada slot?`;
+        window.open(`https://wa.me/628123456789?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // Load pertama kali
+    window.onload = () => renderTickets(tickets);
+</script>
+
+</body>
+</html>
